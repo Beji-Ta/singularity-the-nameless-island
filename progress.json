@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-13T23:25:33.951Z",
+  "lastUpdated": "2026-06-13T23:25:35.236Z",
   "maps": {
     "2@nls1": {
       "shoko": "unexplored",
@@ -35,7 +35,7 @@
       "ne_kobeya_ue": "unexplored",
       "shitsumushitsu": "cleared",
       "tensosaki": "cleared",
-      "gakushushitsu": "cleared",
+      "gakushushitsu": "unexplored",
       "chuo": "unexplored",
       "kita_hiro_higashi": "unexplored"
     }
