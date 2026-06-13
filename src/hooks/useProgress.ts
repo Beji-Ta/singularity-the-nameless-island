@@ -29,28 +29,33 @@ export function useProgress() {
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('idle')
   const [lastSynced, setLastSynced] = useState<Date | null>(null)
 
-  const shaRef     = useRef(sha)
-  const dataRef    = useRef(data)
-  const writingRef = useRef(false)   // 書き込み中フラグ
-  shaRef.current  = sha
-  dataRef.current = data
+  const shaRef        = useRef(sha)
+  const dataRef       = useRef(data)
+  const writingRef    = useRef(false)
+  const syncStatusRef = useRef(syncStatus)
+  shaRef.current        = sha
+  dataRef.current       = data
+  syncStatusRef.current = syncStatus
 
   // ── ポーリング ──────────────────────────────────────────────────────────────
+  // poll を安定した関数にするため syncStatus は ref 経由で参照し依存配列から外す。
+  // これにより setSyncStatus のたびに useEffect が再実行されて即 poll() が
+  // 呼ばれる問題を防ぐ。
 
   const poll = useCallback(async () => {
     if (writingRef.current) return
     try {
       const result = await fetchProgress()
-      if (writingRef.current) return  // fetch 完了後も再チェック（await 中にクリックされた場合）
+      if (writingRef.current) return   // await 中にクリックされた場合も弾く
       if (!result.changed) return
       setData(result.data)
       setSha(result.sha)
       setLastSynced(new Date())
-      if (syncStatus === 'error') setSyncStatus('idle')
+      if (syncStatusRef.current === 'error') setSyncStatus('idle')
     } catch {
       setSyncStatus('error')
     }
-  }, [syncStatus])
+  }, [])   // 依存なし → 関数が再生成されず useEffect も再実行されない
 
   useEffect(() => {
     poll()
