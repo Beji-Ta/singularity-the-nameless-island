@@ -53,7 +53,7 @@ export function MapView({ map }: Props) {
             top: r.y,
             width: 48,
             height: 48,
-            border: '3px solid rgba(255, 220, 30, 0.9)',
+            border: '3px solid rgba(255, 255, 255, 0.9)',
             animation: 'mapRipple 3s ease-out forwards',
           }}
         />
