@@ -70,46 +70,48 @@ export default function App() {
           </div>
         )}
 
-        {/* マップ画像 */}
+        {/* マップ画像＋ボタン（同幅） */}
         <div className="overflow-x-auto">
-          <MapView
-            map={activeMap}
-            remoteClicks={remoteClicks.filter(c => c.mapId === activeMapId)}
-            onMapClick={(x, y) => addClick(activeMapId, x, y)}
-          />
-        </div>
+          <div style={{ width: activeMap.imageWidth, maxWidth: '100%' }}>
+            <MapView
+              map={activeMap}
+              remoteClicks={remoteClicks.filter(c => c.mapId === activeMapId)}
+              onMapClick={(x, y) => addClick(activeMapId, x, y)}
+            />
 
-        {/* エリアボタン一覧 */}
-        {activeMap.areas.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 pt-1">
-            {activeMap.areas.map(area => {
-              const s = statusMap[area.id] ?? 'unexplored'
-              const onStyle =
-                area.color === 'lightgreen' ? 'bg-green-200 border-green-400 text-green-900 hover:bg-green-300' :
-                area.color === 'cyan'       ? 'bg-cyan-200 border-cyan-400 text-cyan-900 hover:bg-cyan-300' :
-                area.color === 'green'      ? 'bg-green-400 border-green-600 text-green-950 hover:bg-green-500' :
-                                              'bg-yellow-200 border-yellow-400 text-yellow-900 hover:bg-yellow-300'
-              return (
-                <button
-                  key={area.id}
-                  onClick={() => toggleArea(activeMapId, area.id)}
-                  className={[
-                    'px-3 py-2 rounded-md text-sm text-left border transition-all select-none',
-                    s === 'cleared'
-                      ? 'bg-gray-700/50 border-gray-600 text-gray-500 line-through hover:bg-gray-700'
-                      : onStyle,
-                  ].join(' ')}
-                >
-                  {area.name}
-                </button>
-              )
-            })}
+            {activeMap.areas.length > 0 ? (
+              <div className="grid grid-cols-4 gap-1 pt-2">
+                {activeMap.areas.map(area => {
+                  const s = statusMap[area.id] ?? 'unexplored'
+                  const onStyle =
+                    area.color === 'lightgreen' ? 'bg-green-200 border-green-400 text-green-900 hover:bg-green-300' :
+                    area.color === 'cyan'       ? 'bg-cyan-200 border-cyan-400 text-cyan-900 hover:bg-cyan-300' :
+                    area.color === 'green'      ? 'bg-green-400 border-green-600 text-green-950 hover:bg-green-500' :
+                                                  'bg-yellow-200 border-yellow-400 text-yellow-900 hover:bg-yellow-300'
+                  return (
+                    <button
+                      key={area.id}
+                      onClick={() => toggleArea(activeMapId, area.id)}
+                      title={area.name}
+                      className={[
+                        'px-2 py-1.5 rounded text-xs text-left border transition-all select-none truncate',
+                        s === 'cleared'
+                          ? 'bg-gray-700/50 border-gray-600 text-gray-500 line-through hover:bg-gray-700'
+                          : onStyle,
+                      ].join(' ')}
+                    >
+                      {area.name}
+                    </button>
+                  )
+                })}
+              </div>
+            ) : (
+              <p className="text-gray-500 text-xs pt-2">
+                エリアデータ未設定（src/data/maps.ts に追加）
+              </p>
+            )}
           </div>
-        ) : (
-          <p className="text-gray-500 text-sm">
-            エリアデータ未設定（src/data/maps.ts に追加）
-          </p>
-        )}
+        </div>
       </main>
     </div>
   )
