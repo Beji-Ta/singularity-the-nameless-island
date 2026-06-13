@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2026-06-13T23:09:23.997Z",
+  "lastUpdated": "2026-06-13T23:09:25.155Z",
   "maps": {
     "2@nls1": {
       "shoko": "unexplored",
       "sojiyogu": "unexplored",
-      "hikaeshitsu": "cleared",
+      "hikaeshitsu": "unexplored",
       "gakushushitsu": "unexplored",
       "renraku": "unexplored",
       "chika": "unexplored",
@@ -14,7 +14,7 @@
       "kabocha": "unexplored",
       "shitsumushitsu": "unexplored",
       "gaimon_center": "unexplored",
-      "chuo": "cleared"
+      "chuo": "unexplored"
     },
     "2@nls2": {
       "wine_soko": "cleared",
