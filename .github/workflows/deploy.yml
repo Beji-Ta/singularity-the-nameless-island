@@ -40,14 +40,3 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
-
-5. 「Commit changes」をクリック
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
