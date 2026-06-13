@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-13T22:53:43.159Z",
+  "lastUpdated": "2026-06-13T22:53:46.916Z",
   "maps": {
     "2@nls1": {
       "shoko": "unexplored",
@@ -24,7 +24,7 @@
     },
     "2@nls4": {
       "dokuso_1": "unexplored",
-      "dokuso_2": "cleared"
+      "dokuso_2": "unexplored"
     }
   }
 }
