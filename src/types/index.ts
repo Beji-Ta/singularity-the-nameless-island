@@ -10,6 +10,10 @@ export interface ProgressData {
 export type Point = [number, number]
 
 export type AreaColor = 'yellow' | 'lightgreen' | 'cyan' | 'green'
+export type AreaZone  =
+  'top-left'    | 'top-center'    | 'top-right'    |
+  'middle-left' | 'middle-center' | 'middle-right' |
+  'bottom-left' | 'bottom-center' | 'bottom-right'
 
 export interface ClickEntry {
   id: string
@@ -24,6 +28,7 @@ export interface AreaData {
   name: string
   points: Point[]
   color?: AreaColor
+  zone?: AreaZone
   description?: string
 }
 

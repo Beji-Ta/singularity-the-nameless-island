@@ -5,7 +5,13 @@ import { useClicks }   from './hooks/useClicks'
 import { MapView }     from './components/MapView'
 import { MapSelector } from './components/MapSelector'
 import { StatusBar }   from './components/StatusBar'
-import type { AreaStatus } from './types'
+import type { AreaStatus, AreaZone } from './types'
+
+const ZONES: AreaZone[] = [
+  'top-left',    'top-center',    'top-right',
+  'middle-left', 'middle-center', 'middle-right',
+  'bottom-left', 'bottom-center', 'bottom-right',
+]
 
 export default function App() {
   const [activeMapId, setActiveMapId] = useState(MAPS[0].id)
@@ -79,33 +85,52 @@ export default function App() {
               onMapClick={(x, y) => addClick(activeMapId, x, y)}
             />
 
-            {activeMap.areas.length > 0 ? (
-              <div className="grid grid-cols-4 gap-1 pt-2">
-                {activeMap.areas.map(area => {
-                  const s = statusMap[area.id] ?? 'unexplored'
-                  const onStyle =
-                    area.color === 'lightgreen' ? 'bg-green-200 border-green-400 text-green-900 hover:bg-green-300' :
-                    area.color === 'cyan'       ? 'bg-cyan-200 border-cyan-400 text-cyan-900 hover:bg-cyan-300' :
-                    area.color === 'green'      ? 'bg-green-400 border-green-600 text-green-950 hover:bg-green-500' :
-                                                  'bg-yellow-200 border-yellow-400 text-yellow-900 hover:bg-yellow-300'
-                  return (
-                    <button
-                      key={area.id}
-                      onClick={() => toggleArea(activeMapId, area.id)}
-                      title={area.name}
-                      className={[
-                        'px-2 py-1.5 rounded text-xs text-left border transition-all select-none truncate',
-                        s === 'cleared'
-                          ? 'bg-gray-700/50 border-gray-600 text-gray-500 line-through hover:bg-gray-700'
-                          : onStyle,
-                      ].join(' ')}
-                    >
-                      {area.name}
-                    </button>
-                  )
-                })}
-              </div>
-            ) : (
+            {activeMap.areas.length > 0 ? (() => {
+              const hasZones = activeMap.areas.some(a => a.zone)
+
+              const renderBtn = (areaId: string) => {
+                const area = activeMap.areas.find(a => a.id === areaId)!
+                const s = statusMap[area.id] ?? 'unexplored'
+                const onStyle =
+                  area.color === 'lightgreen' ? 'bg-green-200 border-green-400 text-green-900 hover:bg-green-300' :
+                  area.color === 'cyan'       ? 'bg-cyan-200 border-cyan-400 text-cyan-900 hover:bg-cyan-300' :
+                  area.color === 'green'      ? 'bg-green-400 border-green-600 text-green-950 hover:bg-green-500' :
+                                                'bg-yellow-200 border-yellow-400 text-yellow-900 hover:bg-yellow-300'
+                return (
+                  <button
+                    key={area.id}
+                    onClick={() => toggleArea(activeMapId, area.id)}
+                    title={area.name}
+                    className={[
+                      'w-full px-2 py-1.5 rounded text-xs text-left border transition-all select-none truncate',
+                      s === 'cleared'
+                        ? 'bg-gray-700/50 border-gray-600 text-gray-500 line-through hover:bg-gray-700'
+                        : onStyle,
+                    ].join(' ')}
+                  >
+                    {area.name}
+                  </button>
+                )
+              }
+
+              return hasZones ? (
+                // ゾーン割り当てあり → 3×3 グリッド
+                <div className="grid grid-cols-3 gap-1 pt-2">
+                  {ZONES.map(zone => (
+                    <div key={zone} className="flex flex-col gap-1">
+                      {activeMap.areas
+                        .filter(a => a.zone === zone)
+                        .map(a => renderBtn(a.id))}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                // ゾーンなし → 通常 4列グリッド
+                <div className="grid grid-cols-4 gap-1 pt-2">
+                  {activeMap.areas.map(a => renderBtn(a.id))}
+                </div>
+              )
+            })() : (
               <p className="text-gray-500 text-xs pt-2">
                 エリアデータ未設定（src/data/maps.ts に追加）
               </p>
