@@ -1,14 +1,5 @@
 import type { MapData } from '../types'
 
-/**
- * マップ・エリア定義
- *
- * points は画像ピクセル座標系 [x, y] の多角形頂点（画像実寸基準）。
- * SVG の viewBox が画像実寸に合っているため、
- * ブラウザの DevTools で画像上の座標を確認して書き換えるだけで反映される。
- *
- * 2@nls1.JPG の実寸: 811 × 585 px
- */
 export const MAPS: MapData[] = [
   {
     id: '2@nls1',
@@ -37,24 +28,84 @@ export const MAPS: MapData[] = [
     id: '2@nls2',
     label: '修道院01',
     imagePath: './maps/2@nls2.JPG',
-    imageWidth: 458,
-    imageHeight: 457,
-    areas: [], // 後から追加
+    imageWidth: 817,
+    imageHeight: 589,
+    areas: [
+      // ● 入手場所（黄色）
+      { id: 'wine',            name: 'ワイン',         color: 'yellow',     points: [] },
+      { id: 'kabocha_1',       name: 'かぼちゃ①',     color: 'yellow',     points: [] },
+      { id: 'higashi_hiro',    name: '東広間',         color: 'yellow',     points: [] },
+      { id: 'kabocha_2',       name: 'かぼちゃ②',     color: 'yellow',     points: [] },
+      // ■ 使用場所（薄緑）
+      { id: 'wine_soko',       name: 'ワイン倉庫',     color: 'lightgreen', points: [] },
+      { id: 'kabocha_soko',    name: 'かぼちゃ倉庫',  color: 'lightgreen', points: [] },
+      { id: 'shukubo_2_ue',    name: '宿泊室②(上)',   color: 'lightgreen', points: [] },
+      { id: 'shoko',           name: '書庫',           color: 'lightgreen', points: [] },
+      { id: 'hikaeshitsu',     name: '控え室',         color: 'lightgreen', points: [] },
+      { id: 'sojiyogu',        name: '掃除用具',       color: 'lightgreen', points: [] },
+      { id: 'tensogen',        name: '転送元',         color: 'lightgreen', points: [] },
+      { id: 'chika',           name: '地下',           color: 'lightgreen', points: [] },
+      { id: 'shukubo_1',       name: '宿泊室①',       color: 'lightgreen', points: [] },
+      { id: 'shukubo_2_shita', name: '宿泊室②(下)',   color: 'lightgreen', points: [] },
+      { id: 'tensosaki',       name: '転送先',         color: 'lightgreen', points: [] },
+    ],
   },
   {
     id: '2@nls3',
     label: '修道院02',
     imagePath: './maps/2@nls3.JPG',
-    imageWidth: 456,
-    imageHeight: 454,
-    areas: [], // 後から追加
+    imageWidth: 810,
+    imageHeight: 586,
+    areas: [
+      // ● 入手場所（黄色）
+      { id: 'wine',              name: 'ワイン',           color: 'yellow',     points: [] },
+      { id: 'nw_kobeya_1',       name: '北西小部屋①',     color: 'yellow',     points: [] },
+      { id: 'nw_kobeya_2',       name: '北西小部屋②',     color: 'yellow',     points: [] },
+      { id: 'kita_hiro_higashi', name: '北広間東',         color: 'yellow',     points: [] },
+      { id: 'renraku_nw',        name: '連絡通路北西',     color: 'yellow',     points: [] },
+      { id: 'ne_kobeya_ue',      name: '北東小部屋(上)',   color: 'yellow',     points: [] },
+      { id: 'saishi_hiroba',     name: '祭祀場広間',       color: 'yellow',     points: [] },
+      { id: 'kita_hiro',         name: '北広間',           color: 'yellow',     points: [] },
+      { id: 'saishi_danju',      name: '祭祀場壇上',       color: 'yellow',     points: [] },
+      { id: 'suijoba',           name: '炊事場',           color: 'yellow',     points: [] },
+      { id: 'kita_hiro_nishi',   name: '北広間西',         color: 'yellow',     points: [] },
+      { id: 'gakushushitsu',     name: '学習室',           color: 'yellow',     points: [] },
+      { id: 'ne_kobeya_shita',   name: '北東小部屋(下)',   color: 'yellow',     points: [] },
+      { id: 'shitsumushitsu',    name: '執務室',           color: 'yellow',     points: [] },
+      // ■ 使用場所（薄緑）
+      { id: 'tensosaki',         name: '転送先',           color: 'lightgreen', points: [] },
+      { id: 'chuo',              name: '中央',             color: 'lightgreen', points: [] },
+    ],
   },
   {
     id: '2@nls4',
     label: '修道院03',
     imagePath: './maps/2@nls4.JPG',
-    imageWidth: 453,
-    imageHeight: 458,
-    areas: [], // 後から追加
+    imageWidth: 821,
+    imageHeight: 591,
+    areas: [
+      // ● 入手場所（黄色）
+      { id: 'dokuso_1',              name: '独房①②-1',     color: 'yellow',     points: [] },
+      { id: 'dokuso_2',              name: '独房①②-2',     color: 'yellow',     points: [] },
+      { id: 'dokuso_3',              name: '独房①②-3',     color: 'yellow',     points: [] },
+      { id: 'dokuso_4',              name: '独房①②-4',     color: 'yellow',     points: [] },
+      { id: 'dokuso_5',              name: '独房①②-5',     color: 'yellow',     points: [] },
+      { id: 'dokuso_6',              name: '独房①②-6',     color: 'yellow',     points: [] },
+      { id: 'odori_nishi',           name: '踊り場(北西)',   color: 'yellow',     points: [] },
+      { id: 'gokoku_nishi_ue',       name: '牢獄西(上)',     color: 'yellow',     points: [] },
+      { id: 'renraku_nw',            name: '連絡通路北西',   color: 'yellow',     points: [] },
+      { id: 'gokoku_higashi_ue',     name: '牢獄東(上)',     color: 'yellow',     points: [] },
+      { id: 'gokoku_nishi_migi',     name: '牢獄西(右)',     color: 'yellow',     points: [] },
+      { id: 'odori_naka',            name: '踊り場(中)',     color: 'yellow',     points: [] },
+      { id: 'chuo_tsuro_nishi',      name: '中央通路西',     color: 'yellow',     points: [] },
+      { id: 'higashi_hiro',          name: '東広間',         color: 'yellow',     points: [] },
+      { id: 'renraku_higashi',       name: '連絡通路東',     color: 'yellow',     points: [] },
+      { id: 'saishi_hiroba',         name: '祭祀場広間',     color: 'yellow',     points: [] },
+      { id: 'saishi_danju',          name: '祭祀場壇上',     color: 'yellow',     points: [] },
+      { id: 'dokuso_shita',          name: '独房①②(下)',    color: 'yellow',     points: [] },
+      { id: 'gokoku_higashi_shita',  name: '牢獄東(下)',     color: 'yellow',     points: [] },
+      // ■ 使用場所（薄緑）
+      { id: 'suijoba',               name: '炊事場',         color: 'lightgreen', points: [] },
+    ],
   },
 ]

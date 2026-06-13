@@ -10,7 +10,8 @@ interface Props {
 let _id = 0
 
 export function MapView({ map }: Props) {
-  const [ripples, setRipples] = useState<Ripple[]>([])
+  const [ripples, setRipples]   = useState<Ripple[]>([])
+  const [showHelp, setShowHelp] = useState(false)
 
   const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -25,14 +26,10 @@ export function MapView({ map }: Props) {
       }, delay)
     }
 
-    spawn(0)     // 1発目
-    spawn(100)   // 2発目 (0.1秒後)
-    spawn(600)   // 3発目 (さらに0.5秒後)
-    spawn(700)   // 4発目 (0.1秒後)
-    spawn(1000)  // 5発目 (1秒後、繰り返し)
-    spawn(1100)  // 6発目
-    spawn(1600)  // 7発目
-    spawn(1700)  // 8発目
+    spawn(0);    spawn(100)
+    spawn(600);  spawn(700)
+    spawn(1000); spawn(1100)
+    spawn(1600); spawn(1700)
   }, [])
 
   return (
@@ -48,6 +45,32 @@ export function MapView({ map }: Props) {
         className="block max-w-full select-none"
         style={{ width: map.imageWidth }}
       />
+
+      {/* ヘルプボタン（右下） */}
+      <button
+        className="absolute bottom-2 right-2 z-10 bg-gray-900/85 border border-gray-400 text-gray-100 text-xs font-bold px-3 py-1 rounded select-none hover:bg-gray-700/90"
+        onMouseDown={e => { e.stopPropagation(); setShowHelp(true) }}
+        onMouseUp={e => { e.stopPropagation(); setShowHelp(false) }}
+        onMouseLeave={() => setShowHelp(false)}
+        onTouchStart={e => { e.stopPropagation(); setShowHelp(true) }}
+        onTouchEnd={e => { e.stopPropagation(); setShowHelp(false) }}
+        onClick={e => e.stopPropagation()}
+      >
+        HELP
+      </button>
+
+      {/* ヘルプ画像オーバーレイ */}
+      {showHelp && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/70 pointer-events-none">
+          <img
+            src="./maps/help_hellfly.JPG"
+            alt="ヘルフライについて"
+            className="max-w-[92%] max-h-[92%] rounded shadow-2xl"
+          />
+        </div>
+      )}
+
+      {/* 波紋エフェクト */}
       {ripples.map(r => (
         <div
           key={r.id}
