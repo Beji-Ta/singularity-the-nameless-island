@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-13T23:25:31.632Z",
+  "lastUpdated": "2026-06-13T23:25:32.766Z",
   "maps": {
     "2@nls1": {
       "shoko": "unexplored",
@@ -30,7 +30,7 @@
     },
     "2@nls3": {
       "nw_kobeya_2": "unexplored",
-      "nw_kobeya_1": "cleared",
+      "nw_kobeya_1": "unexplored",
       "wine": "unexplored",
       "ne_kobeya_ue": "unexplored",
       "shitsumushitsu": "cleared",
