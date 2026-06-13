@@ -29,18 +29,19 @@ export function useProgress() {
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('idle')
   const [lastSynced, setLastSynced] = useState<Date | null>(null)
 
-  // ref で最新の sha を常に参照できるようにする
-  const shaRef  = useRef(sha)
-  const dataRef = useRef(data)
+  const shaRef     = useRef(sha)
+  const dataRef    = useRef(data)
+  const writingRef = useRef(false)   // 書き込み中フラグ
   shaRef.current  = sha
   dataRef.current = data
 
   // ── ポーリング ──────────────────────────────────────────────────────────────
 
   const poll = useCallback(async () => {
+    if (writingRef.current) return   // 書き込み中はポーリング結果を無視
     try {
       const result = await fetchProgress()
-      if (!result.changed) return   // 304: 変化なし
+      if (!result.changed) return
       setData(result.data)
       setSha(result.sha)
       setLastSynced(new Date())
@@ -62,10 +63,10 @@ export function useProgress() {
     const current: AreaStatus = dataRef.current.maps[mapId]?.[areaId] ?? 'unexplored'
     const next: AreaStatus    = current === 'unexplored' ? 'cleared' : 'unexplored'
 
-    // オプティミスティック更新（即時 UI 反映）
     const optimistic = applyChange(dataRef.current, mapId, areaId, next)
     setData(optimistic)
     setSyncStatus('syncing')
+    writingRef.current = true        // 書き込み開始
 
     const doWrite = async (payload: ProgressData, currentSha: string) => {
       const { sha: newSha } = await writeProgress(payload, currentSha)
@@ -78,7 +79,6 @@ export function useProgress() {
       await doWrite(optimistic, shaRef.current)
     } catch (err) {
       if (err instanceof ConflictError) {
-        // 競合: 最新を取得して自分の変更をマージして再試行
         setSyncStatus('conflict')
         try {
           const fresh = await fetchProgress()
@@ -92,7 +92,6 @@ export function useProgress() {
           }
         } catch {
           setSyncStatus('error')
-          // ロールバック: サーバーから再取得
           const rollback = await fetchProgress().catch(() => null)
           if (rollback?.changed) { setData(rollback.data); setSha(rollback.sha) }
         }
@@ -101,6 +100,8 @@ export function useProgress() {
         const rollback = await fetchProgress().catch(() => null)
         if (rollback?.changed) { setData(rollback.data); setSha(rollback.sha) }
       }
+    } finally {
+      writingRef.current = false     // 書き込み完了（成功・失敗問わず）
     }
   }, [])
 
