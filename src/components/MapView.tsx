@@ -1,39 +1,65 @@
-import { useState, useCallback } from 'react'
-import type { MapData } from '../types'
+import { useState, useEffect, useRef, useCallback } from 'react'
+import type { MapData, ClickEntry } from '../types'
 
 interface Ripple { id: number; x: number; y: number }
 
 interface Props {
   map: MapData
+  remoteClicks: ClickEntry[]
+  onMapClick: (xRatio: number, yRatio: number) => void
 }
 
 let _id = 0
 
-export function MapView({ map }: Props) {
+function spawnWaves(
+  x: number,
+  y: number,
+  setRipples: React.Dispatch<React.SetStateAction<Ripple[]>>,
+) {
+  const delays = [0, 100, 600, 700, 1000, 1100, 1600, 1700]
+  delays.forEach(delay => {
+    setTimeout(() => {
+      const id = _id++
+      setRipples(prev => [...prev, { id, x, y }])
+      setTimeout(() => setRipples(prev => prev.filter(r => r.id !== id)), 3000)
+    }, delay)
+  })
+}
+
+export function MapView({ map, remoteClicks, onMapClick }: Props) {
   const [ripples, setRipples]   = useState<Ripple[]>([])
   const [showHelp, setShowHelp] = useState(false)
+  const containerRef            = useRef<HTMLDivElement>(null)
+  const shownRemoteIds          = useRef(new Set<string>())
+
+  // リモートクリックを波紋に変換
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    remoteClicks.forEach(c => {
+      if (shownRemoteIds.current.has(c.id)) return
+      shownRemoteIds.current.add(c.id)
+      const x = c.x * el.offsetWidth
+      const y = c.y * el.offsetHeight
+      spawnWaves(x, y, setRipples)
+    })
+  }, [remoteClicks])
 
   const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
 
-    const spawn = (delay: number) => {
-      setTimeout(() => {
-        const id = _id++
-        setRipples(prev => [...prev, { id, x, y }])
-        setTimeout(() => setRipples(prev => prev.filter(r => r.id !== id)), 3000)
-      }, delay)
-    }
+    spawnWaves(x, y, setRipples)
 
-    spawn(0);    spawn(100)
-    spawn(600);  spawn(700)
-    spawn(1000); spawn(1100)
-    spawn(1600); spawn(1700)
-  }, [])
+    // 比率に変換して親へ通知（GitHub 書き込み）
+    const el = containerRef.current
+    if (el) onMapClick(x / el.offsetWidth, y / el.offsetHeight)
+  }, [onMapClick])
 
   return (
     <div
+      ref={containerRef}
       className="relative inline-block max-w-full overflow-hidden rounded-lg border border-gray-600 shadow-2xl cursor-crosshair"
       style={{ lineHeight: 0 }}
       onClick={handleClick}

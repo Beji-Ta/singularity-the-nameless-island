@@ -11,6 +11,14 @@ export type Point = [number, number]
 
 export type AreaColor = 'yellow' | 'lightgreen' | 'cyan' | 'green'
 
+export interface ClickEntry {
+  id: string
+  mapId: string
+  x: number   // 0〜1（画像幅に対する比率）
+  y: number   // 0〜1（画像高に対する比率）
+  t: string   // ISO timestamp
+}
+
 export interface AreaData {
   id: string
   name: string

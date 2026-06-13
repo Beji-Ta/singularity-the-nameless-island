@@ -1,5 +1,5 @@
 import { GH } from '../config'
-import type { ProgressData } from '../types'
+import type { ProgressData, ClickEntry } from '../types'
 
 const API = 'https://api.github.com'
 const URL = `${API}/repos/${GH.OWNER}/${GH.REPO}/contents/${GH.FILE}`
@@ -72,6 +72,67 @@ export async function writeProgress(
   const result = await res.json() as { content: { sha: string } }
   cachedEtag = '' // キャッシュ無効化（次回は必ず再取得）
   return { sha: result.content.sha }
+}
+
+// ── クリック同期 ─────────────────────────────────────────────────────────────
+
+const CLICKS_URL = `${API}/repos/${GH.OWNER}/${GH.REPO}/contents/clicks.json`
+const KEEP_MS    = 20_000   // 20秒より古いクリックは破棄
+let clicksEtag = ''
+let clicksSha  = ''
+
+export interface FetchClicksResult {
+  entries: ClickEntry[]
+  sha: string
+  changed: boolean
+}
+
+export async function fetchClicks(): Promise<FetchClicksResult> {
+  const headers: Record<string, string> = { ...HEADERS }
+  if (clicksEtag) headers['If-None-Match'] = clicksEtag
+
+  const res = await fetch(CLICKS_URL, { headers })
+
+  if (res.status === 304) return { entries: [], sha: clicksSha, changed: false }
+  if (res.status === 404) return { entries: [], sha: '',        changed: false }
+  if (!res.ok) throw new GitHubError(res.status, await res.text())
+
+  clicksEtag = res.headers.get('ETag') ?? ''
+  const file  = await res.json() as { content: string; sha: string }
+  clicksSha   = file.sha
+  const json  = atob(file.content.replace(/\n/g, ''))
+  return { entries: JSON.parse(json) as ClickEntry[], sha: file.sha, changed: true }
+}
+
+export async function writeClick(
+  entry: ClickEntry,
+  currentEntries: ClickEntry[],
+  currentSha: string,
+): Promise<string> {
+  const now   = Date.now()
+  const fresh = [
+    ...currentEntries.filter(e => now - new Date(e.t).getTime() < KEEP_MS),
+    entry,
+  ]
+  const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(fresh))))
+
+  const res = await fetch(CLICKS_URL, {
+    method: 'PUT',
+    headers: HEADERS,
+    body: JSON.stringify({
+      message: `click [${entry.t}]`,
+      content: encoded,
+      sha: currentSha,
+    }),
+  })
+
+  if (res.status === 409) throw new ConflictError()
+  if (!res.ok) throw new GitHubError(res.status, await res.text())
+
+  const result = await res.json() as { content: { sha: string } }
+  clicksEtag = ''
+  clicksSha  = result.content.sha
+  return result.content.sha
 }
 
 // ── エラークラス ──────────────────────────────────────────────────────────────

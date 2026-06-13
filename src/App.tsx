@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { MAPS } from './data/maps'
 import { useProgress } from './hooks/useProgress'
+import { useClicks }   from './hooks/useClicks'
 import { MapView }     from './components/MapView'
 import { MapSelector } from './components/MapSelector'
 import { StatusBar }   from './components/StatusBar'
@@ -9,6 +10,7 @@ import type { AreaStatus } from './types'
 export default function App() {
   const [activeMapId, setActiveMapId] = useState(MAPS[0].id)
   const { data, syncStatus, lastSynced, toggleArea } = useProgress()
+  const { remoteClicks, addClick } = useClicks()
 
   const activeMap = MAPS.find(m => m.id === activeMapId) ?? MAPS[0]
   const statusMap: Record<string, AreaStatus> = data.maps[activeMapId] ?? {}
@@ -70,7 +72,11 @@ export default function App() {
 
         {/* マップ画像 */}
         <div className="overflow-x-auto">
-          <MapView map={activeMap} />
+          <MapView
+            map={activeMap}
+            remoteClicks={remoteClicks.filter(c => c.mapId === activeMapId)}
+            onMapClick={(x, y) => addClick(activeMapId, x, y)}
+          />
         </div>
 
         {/* エリアボタン一覧 */}
