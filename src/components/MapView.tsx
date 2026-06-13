@@ -16,9 +16,19 @@ export function MapView({ map }: Props) {
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
-    const id = _id++
-    setRipples(prev => [...prev, { id, x, y }])
-    setTimeout(() => setRipples(prev => prev.filter(r => r.id !== id)), 3000)
+
+    const spawn = (delay: number) => {
+      setTimeout(() => {
+        const id = _id++
+        setRipples(prev => [...prev, { id, x, y }])
+        setTimeout(() => setRipples(prev => prev.filter(r => r.id !== id)), 3000)
+      }, delay)
+    }
+
+    spawn(0)    // 1発目
+    spawn(100)  // 2発目 (0.1秒後)
+    spawn(600)  // 3発目 (さらに0.5秒後)
+    spawn(700)  // 4発目 (0.1秒後)
   }, [])
 
   return (
