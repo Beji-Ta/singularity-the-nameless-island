@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { MAPS } from './data/maps'
 import { useProgress } from './hooks/useProgress'
+import { MapView }     from './components/MapView'
 import { MapSelector } from './components/MapSelector'
 import { StatusBar }   from './components/StatusBar'
 import type { AreaStatus } from './types'
@@ -66,6 +67,11 @@ export default function App() {
             </div>
           </div>
         )}
+
+        {/* マップ画像 */}
+        <div className="overflow-x-auto">
+          <MapView map={activeMap} />
+        </div>
 
         {/* エリアボタン一覧 */}
         {activeMap.areas.length > 0 ? (
