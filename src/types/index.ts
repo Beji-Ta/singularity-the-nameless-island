@@ -9,10 +9,13 @@ export interface ProgressData {
 
 export type Point = [number, number]
 
+export type AreaColor = 'yellow' | 'lightgreen'
+
 export interface AreaData {
   id: string
   name: string
   points: Point[]
+  color?: AreaColor
   description?: string
 }
 

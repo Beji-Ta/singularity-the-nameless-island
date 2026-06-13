@@ -78,6 +78,9 @@ export default function App() {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 pt-1">
             {activeMap.areas.map(area => {
               const s = statusMap[area.id] ?? 'unexplored'
+              const onStyle = area.color === 'lightgreen'
+                ? 'bg-green-200 border-green-400 text-green-900 hover:bg-green-300'
+                : 'bg-yellow-200 border-yellow-400 text-yellow-900 hover:bg-yellow-300'
               return (
                 <button
                   key={area.id}
@@ -86,7 +89,7 @@ export default function App() {
                     'px-3 py-2 rounded-md text-sm text-left border transition-all select-none',
                     s === 'cleared'
                       ? 'bg-gray-700/50 border-gray-600 text-gray-500 line-through hover:bg-gray-700'
-                      : 'bg-gray-800 border-gray-600 text-gray-200 hover:bg-gray-700',
+                      : onStyle,
                   ].join(' ')}
                 >
                   {area.name}
