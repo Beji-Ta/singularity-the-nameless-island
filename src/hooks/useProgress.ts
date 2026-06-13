@@ -38,9 +38,10 @@ export function useProgress() {
   // ── ポーリング ──────────────────────────────────────────────────────────────
 
   const poll = useCallback(async () => {
-    if (writingRef.current) return   // 書き込み中はポーリング結果を無視
+    if (writingRef.current) return
     try {
       const result = await fetchProgress()
+      if (writingRef.current) return  // fetch 完了後も再チェック（await 中にクリックされた場合）
       if (!result.changed) return
       setData(result.data)
       setSha(result.sha)
