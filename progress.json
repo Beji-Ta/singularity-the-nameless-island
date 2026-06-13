@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-13T22:51:54.351Z",
+  "lastUpdated": "2026-06-13T22:53:40.121Z",
   "maps": {
     "2@nls1": {
       "shoko": "unexplored",
@@ -21,6 +21,9 @@
       "wine": "unexplored",
       "higashi_hiro": "cleared",
       "shukubo_2_ue": "cleared"
+    },
+    "2@nls4": {
+      "dokuso_1": "cleared"
     }
   }
 }
