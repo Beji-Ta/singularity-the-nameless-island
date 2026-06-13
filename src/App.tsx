@@ -87,14 +87,13 @@ export default function App() {
                   key={area.id}
                   onClick={() => toggleArea(activeMapId, area.id)}
                   className={[
-                    'flex items-center gap-2 px-3 py-2 rounded-md text-sm text-left border transition-all select-none',
+                    'px-3 py-2 rounded-md text-sm text-left border transition-all select-none',
                     s === 'cleared'
-                      ? 'bg-green-950/60 border-green-700 text-green-300 hover:bg-green-900/60'
-                      : 'bg-red-950/60 border-red-800 text-red-300 hover:bg-red-900/60 animate-pulse',
+                      ? 'bg-gray-700/50 border-gray-600 text-gray-500 line-through hover:bg-gray-700'
+                      : 'bg-gray-800 border-gray-600 text-gray-200 hover:bg-gray-700',
                   ].join(' ')}
                 >
-                  <span>{s === 'cleared' ? '✓' : '!'}</span>
-                  <span className="font-medium">{area.name}</span>
+                  {area.name}
                 </button>
               )
             })}
