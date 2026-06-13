@@ -25,10 +25,14 @@ export function MapView({ map }: Props) {
       }, delay)
     }
 
-    spawn(0)    // 1発目
-    spawn(100)  // 2発目 (0.1秒後)
-    spawn(600)  // 3発目 (さらに0.5秒後)
-    spawn(700)  // 4発目 (0.1秒後)
+    spawn(0)     // 1発目
+    spawn(100)   // 2発目 (0.1秒後)
+    spawn(600)   // 3発目 (さらに0.5秒後)
+    spawn(700)   // 4発目 (0.1秒後)
+    spawn(1000)  // 5発目 (1秒後、繰り返し)
+    spawn(1100)  // 6発目
+    spawn(1600)  // 7発目
+    spawn(1700)  // 8発目
   }, [])
 
   return (
