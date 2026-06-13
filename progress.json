@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-13T23:25:32.766Z",
+  "lastUpdated": "2026-06-13T23:25:33.951Z",
   "maps": {
     "2@nls1": {
       "shoko": "unexplored",
@@ -36,7 +36,7 @@
       "shitsumushitsu": "cleared",
       "tensosaki": "cleared",
       "gakushushitsu": "cleared",
-      "chuo": "cleared",
+      "chuo": "unexplored",
       "kita_hiro_higashi": "unexplored"
     }
   }
