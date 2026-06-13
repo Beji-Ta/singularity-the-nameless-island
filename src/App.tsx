@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { MAPS } from './data/maps'
 import { useProgress } from './hooks/useProgress'
-import { MapView }     from './components/MapView'
 import { MapSelector } from './components/MapSelector'
 import { StatusBar }   from './components/StatusBar'
 import type { AreaStatus } from './types'
@@ -68,17 +67,8 @@ export default function App() {
           </div>
         )}
 
-        {/* マップ本体 */}
-        <div className="overflow-x-auto">
-          <MapView
-            map={activeMap}
-            statusMap={statusMap}
-            onToggle={areaId => toggleArea(activeMapId, areaId)}
-          />
-        </div>
-
-        {/* エリア一覧（リスト形式でもクリック可） */}
-        {activeMap.areas.length > 0 && (
+        {/* エリアボタン一覧 */}
+        {activeMap.areas.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 pt-1">
             {activeMap.areas.map(area => {
               const s = statusMap[area.id] ?? 'unexplored'
@@ -98,6 +88,10 @@ export default function App() {
               )
             })}
           </div>
+        ) : (
+          <p className="text-gray-500 text-sm">
+            エリアデータ未設定（src/data/maps.ts に追加）
+          </p>
         )}
       </main>
     </div>
