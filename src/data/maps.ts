@@ -20,8 +20,11 @@ export const MAPS: MapData[] = [
       { id: 'shitsumushitsu',name: '執務室',       color: 'yellow',     points: [[200,325],[295,325],[295,343],[200,343]] },
       { id: 'wine',          name: 'ワイン倉庫',   color: 'yellow',     points: [[307,322],[415,322],[415,342],[307,342]] },
       { id: 'kabocha',       name: 'かぼちゃ倉庫', color: 'yellow',     points: [[213,449],[352,449],[352,467],[213,467]] },
-      // ■ 使用場所（薄緑）
-      { id: 'gaimon_center', name: '外門（使用）', color: 'lightgreen', points: [[302,250],[393,250],[393,272],[302,272]] },
+      // ■ 使用場所（水色）
+      { id: 'gaimon_center', name: '外門（使用）', color: 'cyan',  points: [[302,250],[393,250],[393,272],[302,272]] },
+      // Boss（緑）
+      { id: 'boss1',         name: 'Boss①（物）', color: 'green', points: [] },
+      { id: 'boss2',         name: 'Boss②（魔）', color: 'green', points: [] },
     ],
   },
   {
