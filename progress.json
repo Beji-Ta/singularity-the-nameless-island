@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-13T15:18:07.371Z",
+  "lastUpdated": "2026-06-13T15:18:09.168Z",
   "maps": {
     "2@nls1": {
       "shoko": "cleared",
@@ -13,7 +13,8 @@
       "wine": "cleared",
       "kabocha": "cleared",
       "shitsumushitsu": "cleared",
-      "gaimon_center": "cleared"
+      "gaimon_center": "cleared",
+      "chuo": "cleared"
     }
   }
 }
