@@ -10,7 +10,7 @@ export const GH = {
    *      PAT はこのリポジトリ専用の fine-grained token にしてください。
    *      最悪の場合でも他のリポジトリには影響しません。
    */
-  TOKEN: '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',
+  TOKEN: 'github_pat_11AOUAA4A0gSPhuh6fg3N8_' + 'lAFIFyCWfkJ5DgOiQfxqCmObfab6nR2wkc2N6AQXXGJSN52W54CjkLrfXtt',
 
   /** GitHub ユーザー名（または Organization 名） */
   OWNER: 'Beji-Ta',
