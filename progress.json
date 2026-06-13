@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-13T15:17:57.532Z",
+  "lastUpdated": "2026-06-13T15:17:59.236Z",
   "maps": {
     "2@nls1": {
       "shoko": "cleared",
@@ -8,7 +8,8 @@
       "gakushushitsu": "cleared",
       "renraku": "cleared",
       "chika": "cleared",
-      "gaimon_north": "cleared"
+      "gaimon_north": "cleared",
+      "shudoin01": "cleared"
     }
   }
 }
