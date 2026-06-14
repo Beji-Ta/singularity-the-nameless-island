@@ -37,7 +37,7 @@ export const MAPS: MapData[] = [
     areas: [
       // ★ Boss（緑）
       { id: 'boss1',           name: 'Boss①',          color: 'green',      zone: 'top-left',      points: [] },
-      { id: 'boss2',           name: 'Boss②',          color: 'green',      zone: 'middle-center', points: [] },
+      { id: 'boss2',           name: 'Boss②',          color: 'green',      zone: 'middle-right',  points: [] },
       // ● 入手場所（黄色）
       { id: 'wine',            name: 'ワイン',          color: 'yellow',     zone: 'top-center',    points: [] },
       { id: 'kabocha_1',       name: 'かぼちゃ',        color: 'yellow',     zone: 'top-center',    points: [] },
@@ -48,7 +48,7 @@ export const MAPS: MapData[] = [
       { id: 'kabocha_soko',    name: 'かぼちゃ倉庫(使用)',   color: 'lightgreen', zone: 'top-center',    points: [] },
       { id: 'hikaeshitsu',     name: '控え室(使用)',          color: 'lightgreen', zone: 'middle-left',   points: [] },
       { id: 'shukubo_2_ue',    name: '宿泊室②(使用)',        color: 'lightgreen', zone: 'middle-center', points: [] },
-      { id: 'shoko',           name: '書庫(使用)',            color: 'lightgreen', zone: 'middle-center', points: [] },
+      { id: 'shoko',           name: '書庫(使用)',            color: 'lightgreen', zone: 'middle-right',  points: [] },
       { id: 'shukubo_1',       name: '宿泊室①(使用)',        color: 'lightgreen', zone: 'middle-center', points: [] },
       { id: 'chika',           name: '地下(使用)',            color: 'lightgreen', zone: 'middle-right',  points: [] },
       { id: 'sojiyogu',        name: '掃除用具(使用)',        color: 'lightgreen', zone: 'bottom-left',   points: [] },
