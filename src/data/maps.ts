@@ -100,13 +100,6 @@ export const MAPS: MapData[] = [
     ],
   },
   {
-    id: 'hibam_n',
-    label: 'ヒバム(normal)',
-    imageWidth: 811,
-    imageHeight: 585,
-    areas: [],
-  },
-  {
     id: '2@nls4',
     label: '修道院03',
     imagePath: './maps/2@nls4.JPG',
@@ -148,5 +141,12 @@ export const MAPS: MapData[] = [
       { id: 'gokoku_higashi',        name: '牢獄東',            color: 'yellow',     zone: 'bottom-right',  points: [] },
       { id: 'boss2',                 name: 'Boss②',             color: 'green',      zone: 'bottom-right',  points: [] },
     ],
+  },
+  {
+    id: 'boss_normal',
+    label: 'ボス攻略(normal)',
+    imageWidth: 811,
+    imageHeight: 585,
+    areas: [],
   },
 ]
