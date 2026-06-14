@@ -84,49 +84,111 @@ export default function App() {
   const pct     = total > 0 ? Math.round((cleared / total) * 100) : 0
 
   const bossGuide = (
-    <div className="p-4 bg-gray-800/50 border border-gray-600 rounded-lg text-xs leading-relaxed space-y-3"
+    <div className="p-4 bg-gray-800/50 border border-gray-600 rounded-lg space-y-4 text-sm leading-relaxed"
          style={{ width: activeMap.imageWidth, minHeight: activeMap.imageHeight }}>
-      <p className="text-gray-300 border-b border-gray-600 pb-2">
-        前提として、<span className="text-yellow-400 font-medium">聖杯は無視する</span>。
-        （<span className="text-orange-400">与ダメUP</span>、<span className="text-orange-400">被ダメUP</span>）
-      </p>
 
-      <div className="space-y-1">
-        <p className="text-white font-bold">1. 注意点まとめ</p>
-        <div className="pl-2 space-y-0.5">
-          <p className="text-cyan-300 font-medium">【共通】</p>
-          <p className="text-gray-200 pl-2">・<span className="text-red-400">スタン耐性</span>、<span className="text-blue-300">水状態異常（凍結・氷結・冷凍）耐性</span></p>
-          <p className="text-gray-200 pl-2">・<span className="text-blue-400">水</span>（常時）、<span className="text-green-400">風</span>（一時的）、<span className="text-purple-400">念</span>（一時的）、<span className="text-orange-300">レイジェネ</span>（一時的）</p>
-          <p className="text-cyan-300 font-medium mt-1">【壁】</p>
-          <p className="text-gray-200 pl-2">・<span className="text-red-400">スタン耐性</span>、<span className="text-red-400">ノックバック耐性</span></p>
-          <p className="text-gray-200 pl-2">・無(30以上弱テトラ）、<span className="text-green-500">毒70%～</span>（sta100なら無視レベル）、<span className="text-blue-400">水85%～</span></p>
-          <p className="text-cyan-300 font-medium mt-1">【その他】</p>
-          <p className="text-gray-200 pl-2">・<span className="text-blue-400">水85%～</span>、<span className="text-purple-400">念70%～</span>、<span className="text-yellow-300">聖85%</span>（<span className="text-orange-300">レイジェネ</span>）</p>
-        </div>
+      {/* 前提 */}
+      <div className="flex items-center gap-2 bg-gray-700/60 rounded px-3 py-2 border border-gray-500/50">
+        <span className="text-gray-400 text-xs shrink-0">前提</span>
+        <span className="text-yellow-400 font-semibold">聖杯は無視する</span>
+        <span className="text-gray-400 text-xs">（<span className="text-orange-400">与ダメUP</span> / <span className="text-orange-400">被ダメUP</span>）</span>
       </div>
 
-      <div className="space-y-0.5">
-        <p className="text-white font-bold">2. 開幕・序盤：<span className="text-green-300">【基本耐性維持】</span></p>
-        <p className="text-gray-200 pl-2">・抱えて攻撃で良い。<span className="text-blue-300">水状態異常</span>回復はこの段階では細かくしなくて良い</p>
+      {/* 1. 注意点まとめ */}
+      <div>
+        <p className="text-white font-bold mb-1.5">1. 注意点まとめ</p>
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-gray-700/70 text-gray-400 text-xs">
+              <th className="border border-gray-600 px-3 py-1 text-left w-24">ロール</th>
+              <th className="border border-gray-600 px-3 py-1 text-left">必要な耐性・属性対策</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border border-gray-600 px-3 py-2 align-top bg-gray-700/40">
+                <span className="text-cyan-300 font-medium">【共通】</span>
+              </td>
+              <td className="border border-gray-600 px-3 py-2 text-gray-200 space-y-1">
+                <div><span className="text-red-400">スタン耐性</span>・<span className="text-blue-300">水状態異常耐性（凍結・氷結・冷凍）</span></div>
+                <div><span className="text-blue-400">水</span>（常時）／<span className="text-green-400">風</span>・<span className="text-purple-400">念</span>・<span className="text-orange-300">レイジェネ</span>（一時的）</div>
+              </td>
+            </tr>
+            <tr>
+              <td className="border border-gray-600 px-3 py-2 align-top bg-gray-700/40">
+                <span className="text-cyan-300 font-medium">【壁】</span>
+              </td>
+              <td className="border border-gray-600 px-3 py-2 text-gray-200 space-y-1">
+                <div><span className="text-red-400">スタン耐性</span>・<span className="text-red-400">ノックバック耐性</span></div>
+                <div>無（弱テトラ30以上）・<span className="text-green-500">毒70%～</span><span className="text-gray-400 text-xs">（sta100なら無視レベル）</span>・<span className="text-blue-400">水85%～</span></div>
+              </td>
+            </tr>
+            <tr>
+              <td className="border border-gray-600 px-3 py-2 align-top bg-gray-700/40">
+                <span className="text-cyan-300 font-medium">【その他】</span>
+              </td>
+              <td className="border border-gray-600 px-3 py-2 text-gray-200">
+                <span className="text-blue-400">水85%～</span>・<span className="text-purple-400">念70%～</span>・<span className="text-yellow-300">聖85%</span>（<span className="text-orange-300">レイジェネ</span>）
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <div className="space-y-0.5">
-        <p className="text-white font-bold">3. パンシー召喚<span className="text-green-300">【瞬間換装】</span><span className="text-green-400">風耐性85～95%</span></p>
-        <p className="text-gray-200 pl-2">・被ダメ<span className="text-red-400 font-bold">10倍</span>デバフ対策：「<span className="text-blue-300">フロストフィールド</span>」アイコンが出ている間は、</p>
-        <p className="text-gray-200 pl-4"><span className="text-green-400">ライトニングジャッジメント（風）</span>の被ダメが<span className="text-red-400 font-bold">10倍</span>。</p>
-        <p className="text-gray-200 pl-2">・瞬殺できるなら<span className="text-purple-400">念</span>と<span className="text-blue-400">水</span>が大事</p>
+      {/* 2. バトルフェーズ */}
+      <div>
+        <p className="text-white font-bold mb-1.5">2. バトルフェーズ</p>
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-gray-700/70 text-gray-400 text-xs">
+              <th className="border border-gray-600 px-3 py-1 text-left w-40">フェーズ</th>
+              <th className="border border-gray-600 px-3 py-1 text-left">内容・注意点</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border border-gray-600 px-3 py-2 align-top bg-gray-700/40">
+                <div className="text-green-300 font-medium">開幕・序盤</div>
+                <div className="text-xs text-gray-400 mt-0.5">【基本耐性維持】</div>
+              </td>
+              <td className="border border-gray-600 px-3 py-2 text-gray-200">
+                抱えて攻撃で良い。<span className="text-blue-300">水状態異常</span>回復はこの段階では細かくしなくて良い
+              </td>
+            </tr>
+            <tr>
+              <td className="border border-gray-600 px-3 py-2 align-top bg-gray-700/40">
+                <div className="text-green-300 font-medium">パンシー召喚</div>
+                <div className="text-xs text-green-400 mt-0.5">【瞬間換装】</div>
+                <div className="text-xs text-green-400">風耐性85～95%</div>
+              </td>
+              <td className="border border-gray-600 px-3 py-2 text-gray-200 space-y-1">
+                <div>「<span className="text-blue-300">フロストフィールド</span>」中は<span className="text-green-400">ライトニングジャッジメント（風）</span>の被ダメが<span className="text-red-400 font-bold">10倍</span></div>
+                <div className="text-gray-400 text-xs">瞬殺できるなら<span className="text-purple-400">念</span>と<span className="text-blue-400">水</span>が大事</div>
+              </td>
+            </tr>
+            <tr>
+              <td className="border border-gray-600 px-3 py-2 align-top bg-gray-700/40">
+                <div className="text-green-300 font-medium">終盤（結石出現）</div>
+                <div className="text-xs text-yellow-300 mt-0.5">聖属性耐性</div>
+                <div className="text-xs text-orange-300">（レイジェネ）</div>
+              </td>
+              <td className="border border-gray-600 px-3 py-2 text-gray-200 space-y-1">
+                <div>ボスが「結石」を毎秒全回復 → <span className="text-red-300 font-medium">ボスを離す</span></div>
+                <div className="text-gray-400 text-xs">結石は固定1ダメ</div>
+              </td>
+            </tr>
+            <tr>
+              <td className="border border-gray-600 px-3 py-2 align-top bg-gray-700/40">
+                <div className="text-green-300 font-medium">最後討伐</div>
+              </td>
+              <td className="border border-gray-600 px-3 py-2 text-gray-200">
+                「<span className="text-cyan-300">鎧属性変更アイコン</span>」が出現するが<span className="text-white font-semibold">属性変化は無視</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <div className="space-y-0.5">
-        <p className="text-white font-bold">4. 終盤（結石出現）<span className="text-yellow-300">聖属性耐性</span>（<span className="text-orange-300">レイジェネ</span>）</p>
-        <p className="text-gray-200 pl-2">・ボスが「結石」を毎秒全回復するため、ボスを離す</p>
-        <p className="text-gray-200 pl-2">・結石は固定1ダメ</p>
-      </div>
-
-      <div className="space-y-0.5">
-        <p className="text-white font-bold">５．最後討伐</p>
-        <p className="text-gray-200 pl-2">・属性変化は無視：最終ラウンドで「<span className="text-cyan-300">鎧属性変更アイコン</span>」が出現する</p>
-      </div>
     </div>
   )
 
