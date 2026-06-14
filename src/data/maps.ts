@@ -117,16 +117,16 @@ export const MAPS: MapData[] = [
     imageWidth: 821,
     imageHeight: 591,
     areas: [
-      // 上段左: 踊り場、独房①②(使用)
-      { id: 'odori',                 name: '踊り場',            color: 'yellow',     zone: 'top-left',      points: [] },
+      // 上段左: 独房①②(使用)、踊り場
       { id: 'dokuso_soko_tl',        name: '独房①②(使用)',    color: 'lightgreen', zone: 'top-left',      points: [] },
+      { id: 'odori',                 name: '踊り場',            color: 'yellow',     zone: 'top-left',      points: [] },
       // 上段中央: 独房①②(使用)
       { id: 'dokuso_soko_tc',        name: '独房①②(使用)',    color: 'lightgreen', zone: 'top-center',    points: [] },
-      // 上段右: 牢獄西、Boss③、MVP④、独房①②(使用)
+      // 上段右: 独房①②(使用)、牢獄西、Boss③、MVP④
+      { id: 'dokuso_soko_tr',        name: '独房①②(使用)',    color: 'lightgreen', zone: 'top-right',     points: [] },
       { id: 'gokoku_nishi',          name: '牢獄西',            color: 'yellow',     zone: 'top-right',     points: [] },
       { id: 'boss3',                 name: 'Boss③',             color: 'green',      zone: 'top-right',     points: [] },
       { id: 'mvp4',                  name: 'MVP④',              color: 'green',      zone: 'top-right',     points: [] },
-      { id: 'dokuso_soko_tr',        name: '独房①②(使用)',    color: 'lightgreen', zone: 'top-right',     points: [] },
       // 中段左: 牢獄西(使用)、連絡通路北西(使用)、踊り場(使用)
       { id: 'gokoku_nishi_soko',     name: '牢獄西(使用)',      color: 'lightgreen', zone: 'middle-left',   points: [] },
       { id: 'renraku_nw_soko',       name: '連絡通路北西(使用)',color: 'lightgreen', zone: 'middle-left',   points: [] },
