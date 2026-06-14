@@ -245,10 +245,11 @@ export default function App() {
                 const area = activeMap.areas.find(a => a.id === areaId)!
                 const s = statusMap[area.id] ?? 'unexplored'
                 const onStyle =
-                  area.color === 'lightgreen' ? 'bg-green-200 border-green-400 text-green-900 hover:bg-green-300' :
-                  area.color === 'cyan'       ? 'bg-cyan-200 border-cyan-400 text-cyan-900 hover:bg-cyan-300' :
-                  area.color === 'green'      ? 'bg-green-600 border-green-800 text-white hover:bg-green-700' :
-                                                'bg-yellow-200 border-yellow-400 text-yellow-900 hover:bg-yellow-300'
+                  area.color === 'green'                   ? 'bg-green-600 border-green-800 text-white hover:bg-green-700' :
+                  area.name.endsWith('(使用)') || area.color === 'cyan'
+                                                           ? 'bg-cyan-200 border-cyan-400 text-cyan-900 hover:bg-cyan-300' :
+                  area.color === 'lightgreen'              ? 'bg-green-200 border-green-400 text-green-900 hover:bg-green-300' :
+                                                             'bg-yellow-200 border-yellow-400 text-yellow-900 hover:bg-yellow-300'
                 return (
                   <button
                     key={area.id}
