@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-14T01:03:27.002Z",
+  "lastUpdated": "2026-06-14T01:03:27.899Z",
   "maps": {
     "2@nls1": {
       "shoko": "unexplored",
@@ -10,13 +10,13 @@
       "chika": "unexplored",
       "gaimon_north": "cleared",
       "shudoin01": "cleared",
-      "wine": "unexplored",
+      "wine": "cleared",
       "kabocha": "unexplored",
       "shitsumushitsu": "unexplored",
       "gaimon_center": "cleared",
       "chuo": "unexplored",
       "boss1": "unexplored",
-      "boss2": "unexplored"
+      "boss2": "cleared"
     },
     "2@nls2": {
       "wine_soko": "cleared",
