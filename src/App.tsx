@@ -24,11 +24,13 @@ export default function App() {
   const [msgInput, setMsgInput] = useState('')
   const [msgLines, setMsgLines] = useState(3)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
+  const [showProgressResetConfirm, setShowProgressResetConfirm] = useState(false)
+  const [watcherCount, setWatcherCount] = useState(0)
   const msgInputRef = useRef<HTMLInputElement>(null)
   const msgListRef  = useRef<HTMLDivElement>(null)
   const atBottomRef = useRef(true)  // スクロールが末尾かどうか
 
-  const { data, syncStatus, lastSynced, toggleArea } = useProgress()
+  const { data, syncStatus, lastSynced, toggleArea, resetAllProgress } = useProgress()
   const { remoteClicks, addClick } = useClicks()
   const { messages, addMessage, resetMessages } = useMessages()
 
@@ -48,6 +50,11 @@ export default function App() {
   const handleReset = async () => {
     await resetMessages()
     setShowResetConfirm(false)
+  }
+
+  const handleProgressReset = async () => {
+    await resetAllProgress()
+    setShowProgressResetConfirm(false)
   }
 
   const handleSend = async () => {
@@ -88,6 +95,28 @@ export default function App() {
       <main className="flex-1 p-4 overflow-auto space-y-3">
         {/* ステータスバー */}
         <StatusBar status={syncStatus} lastSynced={lastSynced} />
+
+        {/* 全体制御バー */}
+        <div className="flex items-center gap-4 text-xs">
+          <button
+            onClick={() => setShowProgressResetConfirm(true)}
+            className="px-3 py-1 bg-red-900/60 hover:bg-red-800/80 text-red-300 rounded border border-red-800/60 transition-colors whitespace-nowrap"
+          >
+            全エリアリセット
+          </button>
+          <div className="flex items-center gap-1.5">
+            <span className="text-gray-400 whitespace-nowrap">監視者</span>
+            <button
+              onClick={() => setWatcherCount(n => Math.max(0, n - 1))}
+              className="w-6 h-6 flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-gray-300 rounded transition-colors text-[10px]"
+            >▼</button>
+            <span className="font-mono w-7 text-center text-white tabular-nums">{watcherCount}</span>
+            <button
+              onClick={() => setWatcherCount(n => Math.min(50, n + 1))}
+              className="w-6 h-6 flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-gray-300 rounded transition-colors text-[10px]"
+            >▲</button>
+          </div>
+        </div>
 
         {/* マップタブ */}
         <MapSelector
@@ -281,6 +310,29 @@ export default function App() {
           </div>
         </div>
       </main>
+
+      {/* 全エリアリセット確認ダイアログ */}
+      {showProgressResetConfirm && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-gray-800 border border-gray-600 rounded-lg p-5 shadow-xl w-72">
+            <p className="text-white text-sm mb-5 text-center">全エリアをリセットしますか？</p>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => setShowProgressResetConfirm(false)}
+                className="px-5 py-1.5 text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 rounded transition-colors"
+              >
+                キャンセル
+              </button>
+              <button
+                onClick={handleProgressReset}
+                className="px-5 py-1.5 text-sm bg-red-600 hover:bg-red-500 text-white rounded transition-colors"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* リセット確認ダイアログ */}
       {showResetConfirm && (

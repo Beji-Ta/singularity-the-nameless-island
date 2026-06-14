@@ -144,5 +144,36 @@ export function useProgress() {
     }
   }, [])
 
-  return { data, syncStatus, lastSynced, toggleArea }
+  // ── 全エリアリセット ─────────────────────────────────────────────────────────
+
+  const resetAllProgress = useCallback(async () => {
+    const empty: ProgressData = { lastUpdated: new Date().toISOString(), maps: {} }
+    pendingRef.current.clear()
+    lastWriteRef.current = empty.lastUpdated
+    setData(empty)
+    setSyncStatus('syncing')
+    writingRef.current = true
+    try {
+      const { sha: newSha } = await writeProgress(empty, shaRef.current)
+      setSha(newSha)
+      setLastSynced(new Date())
+      setSyncStatus('idle')
+    } catch (err) {
+      if (err instanceof ConflictError) {
+        try {
+          const fresh = await fetchProgress()
+          const { sha: newSha } = await writeProgress(empty, fresh.sha)
+          setSha(newSha)
+          setLastSynced(new Date())
+          setSyncStatus('idle')
+        } catch { setSyncStatus('error') }
+      } else {
+        setSyncStatus('error')
+      }
+    } finally {
+      writingRef.current = false
+    }
+  }, [])
+
+  return { data, syncStatus, lastSynced, toggleArea, resetAllProgress }
 }
