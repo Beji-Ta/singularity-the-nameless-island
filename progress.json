@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-14T02:02:10.567Z",
+  "lastUpdated": "2026-06-14T02:02:11.877Z",
   "maps": {
     "2@nls1": {
       "shoko": "unexplored",
@@ -49,7 +49,8 @@
       "nw_kobeya_1_soko": "unexplored",
       "nw_kobeya_2_soko": "unexplored",
       "nw_kobeya_3_soko": "unexplored",
-      "boss1": "cleared"
+      "boss1": "unexplored",
+      "kita_hiro_nishi_soko": "cleared"
     }
   }
 }
