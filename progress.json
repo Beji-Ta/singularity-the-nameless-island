@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-14T01:03:27.899Z",
+  "lastUpdated": "2026-06-14T01:03:29.905Z",
   "maps": {
     "2@nls1": {
       "shoko": "unexplored",
@@ -7,7 +7,7 @@
       "hikaeshitsu": "unexplored",
       "gakushushitsu": "unexplored",
       "renraku": "unexplored",
-      "chika": "unexplored",
+      "chika": "cleared",
       "gaimon_north": "cleared",
       "shudoin01": "cleared",
       "wine": "cleared",
