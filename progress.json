@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-14T01:49:14.669Z",
+  "lastUpdated": "2026-06-14T02:02:10.567Z",
   "maps": {
     "2@nls1": {
       "shoko": "unexplored",
@@ -43,12 +43,13 @@
       "tensosaki": "unexplored",
       "gakushushitsu": "unexplored",
       "chuo": "unexplored",
-      "kita_hiro_higashi": "cleared",
-      "suijoba": "cleared",
+      "kita_hiro_higashi": "unexplored",
+      "suijoba": "unexplored",
       "saishi_hiroba": "unexplored",
-      "nw_kobeya_1_soko": "cleared",
+      "nw_kobeya_1_soko": "unexplored",
       "nw_kobeya_2_soko": "unexplored",
-      "nw_kobeya_3_soko": "unexplored"
+      "nw_kobeya_3_soko": "unexplored",
+      "boss1": "cleared"
     }
   }
 }
