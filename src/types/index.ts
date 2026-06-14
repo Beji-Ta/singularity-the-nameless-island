@@ -41,4 +41,6 @@ export interface MapData {
   areas: AreaData[]
   /** true の場合、左右ゾーンを (使用)/非(使用) で2列分割して表示 */
   splitZoneLayout?: boolean
+  /** ボタングリッド上部に表示する攻略情報テキスト（行ごとの配列） */
+  infoLines?: string[]
 }

@@ -66,6 +66,9 @@ export const MAPS: MapData[] = [
     imageWidth: 810,
     imageHeight: 586,
     splitZoneLayout: true,
+    infoLines: [
+      'チーム速攻：根源→叡知→修道院03→左下で監獄鍵→右下で監獄東鍵→右上で暴食魔王分身',
+    ],
     areas: [
       // ★ Boss（緑）
       { id: 'boss1',                  name: 'Boss①',              color: 'green',      zone: 'middle-center', points: [] },

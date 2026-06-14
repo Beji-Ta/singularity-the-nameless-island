@@ -85,10 +85,14 @@ export default function App() {
               onMapClick={(x, y) => addClick(activeMapId, x, y)}
             />
 
-            {/* 攻略情報 */}
-            <div className="mt-2 p-2 bg-gray-800 border border-gray-600 rounded text-xs text-gray-200 leading-relaxed space-y-0.5">
-              <p>チーム速攻：根源→不滅→修道院03→左下で監獄鍵→右下で監獄東鍵→右上で暴食魔王分身</p>
-            </div>
+            {/* 攻略情報（マップごとに個別設定） */}
+            {activeMap.infoLines && activeMap.infoLines.length > 0 && (
+              <div className="mt-2 p-2 bg-gray-800 border border-gray-600 rounded text-xs text-gray-200 leading-relaxed space-y-0.5">
+                {activeMap.infoLines.map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </div>
+            )}
 
             {activeMap.areas.length > 0 ? (() => {
               const hasZones       = activeMap.areas.some(a => a.zone)
