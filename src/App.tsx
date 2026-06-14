@@ -154,6 +154,12 @@ export default function App() {
               onMapClick={(x, y) => addClick(activeMapId, x, y)}
             />
 
+            {/* MAP操作ヒント */}
+            <div className="mt-1.5 flex items-center gap-2 px-3 py-2 bg-indigo-950/70 border border-indigo-500/50 rounded text-indigo-300 text-xs font-medium">
+              <span className="text-indigo-400 text-base leading-none shrink-0">◎</span>
+              MAPをクリックすると波紋で大まかな座標を共有できます
+            </div>
+
             {/* 伝言板 */}
             <div className="mt-2 border border-gray-600 rounded overflow-hidden text-xs">
               {/* ヘッダー：タイトル／リセット／行数拡縮 */}
