@@ -135,6 +135,56 @@ export async function writeClick(
   return result.content.sha
 }
 
+// ── 監視者カウンター ──────────────────────────────────────────────────────────
+
+const COUNTER_URL = `${API}/repos/${GH.OWNER}/${GH.REPO}/contents/counter.json`
+let counterEtag = ''
+let counterSha  = ''
+
+export interface FetchCounterResult {
+  value: number
+  sha: string
+  changed: boolean
+}
+
+export async function fetchCounter(): Promise<FetchCounterResult> {
+  const headers: Record<string, string> = { ...HEADERS }
+  if (counterEtag) headers['If-None-Match'] = counterEtag
+
+  const res = await fetch(COUNTER_URL, { headers })
+
+  if (res.status === 304) return { value: 0, sha: counterSha, changed: false }
+  if (res.status === 404) return { value: 0, sha: '',         changed: false }
+  if (!res.ok) throw new GitHubError(res.status, await res.text())
+
+  counterEtag = res.headers.get('ETag') ?? ''
+  const file  = await res.json() as { content: string; sha: string }
+  counterSha  = file.sha
+  const raw   = atob(file.content.replace(/\n/g, ''))
+  const data  = JSON.parse(raw) as { value: number }
+  return { value: data.value, sha: file.sha, changed: true }
+}
+
+export async function writeCounter(value: number, currentSha: string): Promise<string> {
+  const encoded = btoa(JSON.stringify({ value }))
+  const body: Record<string, string> = { message: `counter: ${value}`, content: encoded }
+  if (currentSha) body.sha = currentSha
+
+  const res = await fetch(COUNTER_URL, {
+    method: 'PUT',
+    headers: HEADERS,
+    body: JSON.stringify(body),
+  })
+
+  if (res.status === 409) throw new ConflictError()
+  if (!res.ok) throw new GitHubError(res.status, await res.text())
+
+  const result = await res.json() as { content: { sha: string } }
+  counterEtag = ''
+  counterSha  = result.content.sha
+  return result.content.sha
+}
+
 // ── 伝言板 ───────────────────────────────────────────────────────────────────
 
 const MESSAGES_URL = `${API}/repos/${GH.OWNER}/${GH.REPO}/contents/messages.json`

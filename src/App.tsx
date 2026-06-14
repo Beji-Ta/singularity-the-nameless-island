@@ -3,6 +3,7 @@ import { MAPS } from './data/maps'
 import { useProgress }  from './hooks/useProgress'
 import { useClicks }    from './hooks/useClicks'
 import { useMessages }  from './hooks/useMessages'
+import { useCounter }   from './hooks/useCounter'
 import { MapView }      from './components/MapView'
 import { MapSelector }  from './components/MapSelector'
 import { StatusBar }    from './components/StatusBar'
@@ -25,7 +26,7 @@ export default function App() {
   const [msgLines, setMsgLines] = useState(3)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [showProgressResetConfirm, setShowProgressResetConfirm] = useState(false)
-  const [watcherCount, setWatcherCount] = useState(0)
+  const { value: watcherCount, setCounter: setWatcherCount } = useCounter()
   const msgInputRef = useRef<HTMLInputElement>(null)
   const msgListRef  = useRef<HTMLDivElement>(null)
   const atBottomRef = useRef(true)  // スクロールが末尾かどうか
@@ -107,12 +108,12 @@ export default function App() {
           <div className="flex items-center gap-1.5">
             <span className="text-gray-400 whitespace-nowrap">監視者</span>
             <button
-              onClick={() => setWatcherCount(n => Math.max(0, n - 1))}
+              onClick={() => setWatcherCount(watcherCount - 1)}
               className="w-6 h-6 flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-gray-300 rounded transition-colors text-[10px]"
             >▼</button>
             <span className="font-mono w-7 text-center text-white tabular-nums">{watcherCount}</span>
             <button
-              onClick={() => setWatcherCount(n => Math.min(50, n + 1))}
+              onClick={() => setWatcherCount(watcherCount + 1)}
               className="w-6 h-6 flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-gray-300 rounded transition-colors text-[10px]"
             >▲</button>
           </div>
