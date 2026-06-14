@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-06-14T05:49:47.935Z",
+  "lastUpdated": "2026-06-14T05:49:48.807Z",
   "maps": {
     "2@nls1": {
       "gaimon_center": "unexplored",
-      "shoko": "cleared"
+      "shoko": "unexplored"
     },
     "2@nls3": {
       "gakushushitsu_soko": "unexplored"
