@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-14T01:49:08.667Z",
+  "lastUpdated": "2026-06-14T01:49:09.694Z",
   "maps": {
     "2@nls1": {
       "shoko": "unexplored",
@@ -47,7 +47,7 @@
       "suijoba": "cleared",
       "saishi_hiroba": "cleared",
       "nw_kobeya_1_soko": "unexplored",
-      "nw_kobeya_2_soko": "cleared",
+      "nw_kobeya_2_soko": "unexplored",
       "nw_kobeya_3_soko": "unexplored"
     }
   }
