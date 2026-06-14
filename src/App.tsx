@@ -1,11 +1,17 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { MAPS } from './data/maps'
-import { useProgress } from './hooks/useProgress'
-import { useClicks }   from './hooks/useClicks'
-import { MapView }     from './components/MapView'
-import { MapSelector } from './components/MapSelector'
-import { StatusBar }   from './components/StatusBar'
+import { useProgress }  from './hooks/useProgress'
+import { useClicks }    from './hooks/useClicks'
+import { useMessages }  from './hooks/useMessages'
+import { MapView }      from './components/MapView'
+import { MapSelector }  from './components/MapSelector'
+import { StatusBar }    from './components/StatusBar'
 import type { AreaStatus, AreaZone } from './types'
+
+function fmtTime(iso: string): string {
+  const d = new Date(iso)
+  return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`
+}
 
 const ZONES: AreaZone[] = [
   'top-left',    'top-center',    'top-right',
@@ -15,8 +21,19 @@ const ZONES: AreaZone[] = [
 
 export default function App() {
   const [activeMapId, setActiveMapId] = useState(MAPS[0].id)
+  const [msgInput, setMsgInput] = useState('')
+  const msgInputRef = useRef<HTMLInputElement>(null)
+
   const { data, syncStatus, lastSynced, toggleArea } = useProgress()
   const { remoteClicks, addClick } = useClicks()
+  const { messages, addMessage }   = useMessages()
+
+  const handleSend = async () => {
+    if (!msgInput.trim()) return
+    await addMessage(msgInput)
+    setMsgInput('')
+    msgInputRef.current?.focus()
+  }
 
   const activeMap = MAPS.find(m => m.id === activeMapId) ?? MAPS[0]
   const statusMap: Record<string, AreaStatus> = data.maps[activeMapId] ?? {}
@@ -84,6 +101,39 @@ export default function App() {
               remoteClicks={remoteClicks.filter(c => c.mapId === activeMapId)}
               onMapClick={(x, y) => addClick(activeMapId, x, y)}
             />
+
+            {/* 伝言板 */}
+            <div className="mt-2 border border-gray-600 rounded overflow-hidden text-xs">
+              <div className="bg-gray-800/80 px-2 py-1.5 min-h-[2.5rem] space-y-0.5">
+                {messages.length === 0 ? (
+                  <p className="text-gray-500">伝言なし</p>
+                ) : (
+                  messages.slice(-8).map(m => (
+                    <p key={m.id} className="text-gray-200 break-all">
+                      <span className="text-gray-400 mr-1 shrink-0">[{fmtTime(m.t)}]</span>
+                      {m.text}
+                    </p>
+                  ))
+                )}
+              </div>
+              <div className="flex border-t border-gray-600">
+                <input
+                  ref={msgInputRef}
+                  type="text"
+                  value={msgInput}
+                  onChange={e => setMsgInput(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleSend()}
+                  placeholder="伝言を入力… Enter または送信"
+                  className="flex-1 bg-gray-700 text-white px-2 py-1.5 outline-none placeholder-gray-500 min-w-0"
+                />
+                <button
+                  onClick={handleSend}
+                  className="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white px-3 py-1.5 transition-colors shrink-0"
+                >
+                  送信
+                </button>
+              </div>
+            </div>
 
             {/* 攻略情報（マップごとに個別設定） */}
             {activeMap.infoLines && activeMap.infoLines.length > 0 && (

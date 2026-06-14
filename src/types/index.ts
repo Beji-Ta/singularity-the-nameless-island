@@ -23,6 +23,12 @@ export interface ClickEntry {
   t: string   // ISO timestamp
 }
 
+export interface MessageEntry {
+  id: string
+  text: string
+  t: string   // ISO timestamp
+}
+
 export interface AreaData {
   id: string
   name: string

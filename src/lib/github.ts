@@ -1,5 +1,5 @@
 import { GH } from '../config'
-import type { ProgressData, ClickEntry } from '../types'
+import type { ProgressData, ClickEntry, MessageEntry } from '../types'
 
 const API = 'https://api.github.com'
 const URL = `${API}/repos/${GH.OWNER}/${GH.REPO}/contents/${GH.FILE}`
@@ -132,6 +132,69 @@ export async function writeClick(
   const result = await res.json() as { content: { sha: string } }
   clicksEtag = ''
   clicksSha  = result.content.sha
+  return result.content.sha
+}
+
+// ── 伝言板 ───────────────────────────────────────────────────────────────────
+
+const MESSAGES_URL = `${API}/repos/${GH.OWNER}/${GH.REPO}/contents/messages.json`
+const KEEP_MSG_MS  = 86_400_000   // 24時間保持
+let messagesEtag = ''
+let messagesSha  = ''
+
+export interface FetchMessagesResult {
+  entries: MessageEntry[]
+  sha: string
+  changed: boolean
+}
+
+export async function fetchMessages(): Promise<FetchMessagesResult> {
+  const headers: Record<string, string> = { ...HEADERS }
+  if (messagesEtag) headers['If-None-Match'] = messagesEtag
+
+  const res = await fetch(MESSAGES_URL, { headers })
+
+  if (res.status === 304) return { entries: [], sha: messagesSha, changed: false }
+  if (res.status === 404) return { entries: [], sha: '',          changed: false }
+  if (!res.ok) throw new GitHubError(res.status, await res.text())
+
+  messagesEtag = res.headers.get('ETag') ?? ''
+  const file   = await res.json() as { content: string; sha: string }
+  messagesSha  = file.sha
+  const json   = atob(file.content.replace(/\n/g, ''))
+  return { entries: JSON.parse(json) as MessageEntry[], sha: file.sha, changed: true }
+}
+
+export async function writeMessage(
+  entry: MessageEntry,
+  currentEntries: MessageEntry[],
+  currentSha: string,
+): Promise<string> {
+  const now   = Date.now()
+  const fresh = [
+    ...currentEntries.filter(e => now - new Date(e.t).getTime() < KEEP_MSG_MS),
+    entry,
+  ]
+  const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(fresh))))
+
+  const body: Record<string, string> = {
+    message: `msg [${entry.t}]`,
+    content: encoded,
+  }
+  if (currentSha) body.sha = currentSha   // 新規作成時は sha なし
+
+  const res = await fetch(MESSAGES_URL, {
+    method: 'PUT',
+    headers: HEADERS,
+    body: JSON.stringify(body),
+  })
+
+  if (res.status === 409) throw new ConflictError()
+  if (!res.ok) throw new GitHubError(res.status, await res.text())
+
+  const result = await res.json() as { content: { sha: string } }
+  messagesEtag = ''
+  messagesSha  = result.content.sha
   return result.content.sha
 }
 
