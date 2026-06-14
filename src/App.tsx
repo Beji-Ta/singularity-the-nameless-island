@@ -26,7 +26,7 @@ export default function App() {
   const [msgLines, setMsgLines] = useState(3)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [showProgressResetConfirm, setShowProgressResetConfirm] = useState(false)
-  const [sideLayout, setSideLayout] = useState(() => window.innerHeight <= 700)
+  const [sideLayout, setSideLayout] = useState(false)
   const { value: watcherCount, setCounter: setWatcherCount } = useCounter()
   const msgInputRef = useRef<HTMLInputElement>(null)
   const msgListRef  = useRef<HTMLDivElement>(null)
@@ -35,13 +35,6 @@ export default function App() {
   const { data, syncStatus, lastSynced, toggleArea, resetAllProgress } = useProgress()
   const { remoteClicks, addClick } = useClicks()
   const { messages, addMessage, resetMessages } = useMessages()
-
-  // ビューポート高さ監視（700px以下でボタンをMAP右に配置）
-  useEffect(() => {
-    const check = () => setSideLayout(window.innerHeight <= 700)
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
-  }, [])
 
   // 新着メッセージが来たとき、末尾にいれば自動スクロール
   useEffect(() => {
@@ -112,6 +105,13 @@ export default function App() {
             className="px-3 py-1 bg-red-900/60 hover:bg-red-800/80 text-red-300 rounded border border-red-800/60 transition-colors whitespace-nowrap"
           >
             全エリアリセット
+          </button>
+          <button
+            onClick={() => setSideLayout(v => !v)}
+            className="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded border border-gray-600 transition-colors whitespace-nowrap"
+            title="ボタングリッドの表示位置を切り替え"
+          >
+            {sideLayout ? '↑ 下に表示' : '→ 右に表示'}
           </button>
           <div className="flex items-center gap-1.5">
             <span className="text-gray-400 whitespace-nowrap">監視者</span>
