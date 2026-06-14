@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-14T01:03:57.895Z",
+  "lastUpdated": "2026-06-14T01:03:58.934Z",
   "maps": {
     "2@nls1": {
       "shoko": "unexplored",
@@ -27,8 +27,8 @@
       "kabocha_1": "unexplored",
       "boss1": "unexplored",
       "boss2": "unexplored",
-      "shoko": "cleared",
-      "hikaeshitsu": "cleared"
+      "shoko": "unexplored",
+      "hikaeshitsu": "unexplored"
     },
     "2@nls4": {
       "dokuso_1": "unexplored",
