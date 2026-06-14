@@ -41,7 +41,7 @@ export interface AreaData {
 export interface MapData {
   id: string
   label: string
-  imagePath: string
+  imagePath?: string
   imageWidth: number
   imageHeight: number
   areas: AreaData[]

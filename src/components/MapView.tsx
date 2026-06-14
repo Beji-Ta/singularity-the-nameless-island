@@ -64,13 +64,22 @@ export function MapView({ map, remoteClicks, onMapClick }: Props) {
       style={{ lineHeight: 0 }}
       onClick={handleClick}
     >
-      <img
-        src={map.imagePath}
-        alt={map.label}
-        draggable={false}
-        className="block max-w-full select-none"
-        style={{ width: map.imageWidth }}
-      />
+      {map.imagePath ? (
+        <img
+          src={map.imagePath}
+          alt={map.label}
+          draggable={false}
+          className="block max-w-full select-none"
+          style={{ width: map.imageWidth }}
+        />
+      ) : (
+        <div
+          className="flex items-center justify-center bg-gray-800 text-gray-500 text-sm select-none"
+          style={{ width: map.imageWidth, height: map.imageHeight }}
+        >
+          MAP画像準備中
+        </div>
+      )}
 
       {/* ヘルプボタン（右下） */}
       <button

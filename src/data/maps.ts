@@ -100,6 +100,13 @@ export const MAPS: MapData[] = [
     ],
   },
   {
+    id: 'hibam_n',
+    label: 'ヒバム(normal)',
+    imageWidth: 811,
+    imageHeight: 585,
+    areas: [],
+  },
+  {
     id: '2@nls4',
     label: '修道院03',
     imagePath: './maps/2@nls4.JPG',
