@@ -128,7 +128,7 @@ export default function App() {
                 <span className="text-cyan-300 font-medium">【その他】</span>
               </td>
               <td className="border border-gray-600 px-3 py-2 text-gray-200">
-                <span className="text-blue-400">水85%～</span>・<span className="text-purple-400">念70%～</span>・<span className="text-yellow-300">聖85%</span>（<span className="text-orange-300">レイジェネ</span>）
+                <span className="text-blue-400">水85%～</span>・<span className="text-purple-400">念70%～</span>・<span className="text-yellow-300">聖95%</span>（<span className="text-orange-300">レイジェネ</span>　痛い）
               </td>
             </tr>
           </tbody>
