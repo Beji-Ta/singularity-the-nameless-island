@@ -112,6 +112,10 @@ export const MAPS: MapData[] = [
     imagePath: './maps/2@nls4.JPG',
     imageWidth: 821,
     imageHeight: 591,
+    infoLines: [
+      'チーム速攻：根源→叡知→修道院03→左下で監獄鍵→右下で監獄東鍵→右上で暴食魔王分身',
+      '暴食魔王分身：頭武器コートスタン耐性',
+    ],
     areas: [
       // 上段左: 独房①②(使用)、踊り場
       { id: 'dokuso_soko_tl',        name: '独房①②(使用)',    color: 'lightgreen', zone: 'top-left',      points: [] },
