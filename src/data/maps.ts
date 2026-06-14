@@ -47,7 +47,7 @@ export const MAPS: MapData[] = [
       { id: 'wine_soko',       name: 'ワイン倉庫(使用)',      color: 'lightgreen', zone: 'top-center',    points: [] },
       { id: 'kabocha_soko',    name: 'かぼちゃ倉庫(使用)',   color: 'lightgreen', zone: 'top-center',    points: [] },
       { id: 'hikaeshitsu',     name: '控え室(使用)',          color: 'lightgreen', zone: 'middle-left',   points: [] },
-      { id: 'shukubo_2_ue',    name: '宿泊室②',              color: 'lightgreen', zone: 'middle-center', points: [] },
+      { id: 'shukubo_2_ue',    name: '宿泊室②',              color: 'yellow',     zone: 'middle-center', points: [] },
       { id: 'shoko',           name: '書庫(使用)',            color: 'lightgreen', zone: 'middle-right',  points: [] },
       { id: 'shukubo_1',       name: '宿泊室①(使用)',        color: 'lightgreen', zone: 'middle-center', points: [] },
       { id: 'chika',           name: '地下(使用)',            color: 'lightgreen', zone: 'middle-right',  points: [] },
