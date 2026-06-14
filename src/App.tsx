@@ -83,6 +83,53 @@ export default function App() {
   const total   = totalCounts[activeMapId]   ?? 0
   const pct     = total > 0 ? Math.round((cleared / total) * 100) : 0
 
+  const bossGuide = (
+    <div className="p-4 bg-gray-800/50 border border-gray-600 rounded-lg text-xs leading-relaxed space-y-3"
+         style={{ width: activeMap.imageWidth, minHeight: activeMap.imageHeight }}>
+      <p className="text-gray-300 border-b border-gray-600 pb-2">
+        前提として、<span className="text-yellow-400 font-medium">聖杯は無視する</span>。
+        （<span className="text-orange-400">与ダメUP</span>、<span className="text-orange-400">被ダメUP</span>）
+      </p>
+
+      <div className="space-y-1">
+        <p className="text-white font-bold">1. 注意点まとめ</p>
+        <div className="pl-2 space-y-0.5">
+          <p className="text-cyan-300 font-medium">【共通】</p>
+          <p className="text-gray-200 pl-2">・<span className="text-red-400">スタン耐性</span>、<span className="text-blue-300">水状態異常（凍結・氷結・冷凍）耐性</span></p>
+          <p className="text-gray-200 pl-2">・<span className="text-blue-400">水</span>（常時）、<span className="text-green-400">風</span>（一時的）、<span className="text-purple-400">念</span>（一時的）、<span className="text-orange-300">レイジェネ</span>（一時的）</p>
+          <p className="text-cyan-300 font-medium mt-1">【壁】</p>
+          <p className="text-gray-200 pl-2">・<span className="text-red-400">スタン耐性</span>、<span className="text-red-400">ノックバック耐性</span></p>
+          <p className="text-gray-200 pl-2">・無(30以上弱テトラ）、<span className="text-green-500">毒70%～</span>（sta100なら無視レベル）、<span className="text-blue-400">水85%～</span></p>
+          <p className="text-cyan-300 font-medium mt-1">【その他】</p>
+          <p className="text-gray-200 pl-2">・<span className="text-blue-400">水85%～</span>、<span className="text-purple-400">念70%～</span>、<span className="text-yellow-300">聖85%</span>（<span className="text-orange-300">レイジェネ</span>）</p>
+        </div>
+      </div>
+
+      <div className="space-y-0.5">
+        <p className="text-white font-bold">2. 開幕・序盤：<span className="text-green-300">【基本耐性維持】</span></p>
+        <p className="text-gray-200 pl-2">・抱えて攻撃で良い。<span className="text-blue-300">水状態異常</span>回復はこの段階では細かくしなくて良い</p>
+      </div>
+
+      <div className="space-y-0.5">
+        <p className="text-white font-bold">3. パンシー召喚<span className="text-green-300">【瞬間換装】</span><span className="text-green-400">風耐性85～95%</span></p>
+        <p className="text-gray-200 pl-2">・被ダメ<span className="text-red-400 font-bold">10倍</span>デバフ対策：「<span className="text-blue-300">フロストフィールド</span>」アイコンが出ている間は、</p>
+        <p className="text-gray-200 pl-4"><span className="text-green-400">ライトニングジャッジメント（風）</span>の被ダメが<span className="text-red-400 font-bold">10倍</span>。</p>
+        <p className="text-gray-200 pl-2">・瞬殺できるなら<span className="text-purple-400">念</span>と<span className="text-blue-400">水</span>が大事</p>
+      </div>
+
+      <div className="space-y-0.5">
+        <p className="text-white font-bold">4. 終盤（結石出現）<span className="text-yellow-300">聖属性耐性</span>（<span className="text-orange-300">レイジェネ</span>）</p>
+        <p className="text-gray-200 pl-2">・ボスが「結石」を毎秒全回復するため、ボスを離す</p>
+        <p className="text-gray-200 pl-2">・結石は固定1ダメ</p>
+      </div>
+
+      <div className="space-y-0.5">
+        <p className="text-white font-bold">５．最後討伐</p>
+        <p className="text-gray-200 pl-2">・属性変化は無視：最終ラウンドで「<span className="text-cyan-300">鎧属性変更アイコン</span>」が出現する</p>
+      </div>
+    </div>
+  )
+
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col">
       <header className="bg-gray-800 border-b border-gray-700 px-5 py-3 flex items-center gap-4">
@@ -163,17 +210,20 @@ export default function App() {
             className={sideLayout ? 'shrink-0' : undefined}
             style={sideLayout ? { width: activeMap.imageWidth, maxWidth: '100%' } : undefined}
           >
-            <MapView
-              map={activeMap}
-              remoteClicks={remoteClicks.filter(c => c.mapId === activeMapId)}
-              onMapClick={(x, y) => addClick(activeMapId, x, y)}
-            />
-
-            {/* MAP操作ヒント */}
-            <div className="mt-1.5 flex items-center gap-2 px-3 py-2 bg-indigo-950/70 border border-indigo-500/50 rounded text-indigo-300 text-xs font-medium">
-              <span className="text-indigo-400 text-base leading-none shrink-0">◎</span>
-              MAPをクリックすると波紋で大まかな座標を共有できます
-            </div>
+            {activeMapId === 'boss_normal' ? bossGuide : (
+              <>
+                <MapView
+                  map={activeMap}
+                  remoteClicks={remoteClicks.filter(c => c.mapId === activeMapId)}
+                  onMapClick={(x, y) => addClick(activeMapId, x, y)}
+                />
+                {/* MAP操作ヒント */}
+                <div className="mt-1.5 flex items-center gap-2 px-3 py-2 bg-indigo-950/70 border border-indigo-500/50 rounded text-indigo-300 text-xs font-medium">
+                  <span className="text-indigo-400 text-base leading-none shrink-0">◎</span>
+                  MAPをクリックすると波紋で大まかな座標を共有できます
+                </div>
+              </>
+            )}
 
             {/* 攻略情報（マップごとに個別設定） */}
             {activeMap.infoLines && activeMap.infoLines.length > 0 && (
