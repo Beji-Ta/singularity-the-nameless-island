@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { MAPS } from './data/maps'
 import { useProgress }  from './hooks/useProgress'
 import { useClicks }    from './hooks/useClicks'
@@ -23,11 +23,28 @@ export default function App() {
   const [activeMapId, setActiveMapId] = useState(MAPS[0].id)
   const [msgInput, setMsgInput] = useState('')
   const [msgLines, setMsgLines] = useState(5)
+  const [msgViewStart, setMsgViewStart] = useState(0)
   const msgInputRef = useRef<HTMLInputElement>(null)
+  const pinnedRef = useRef(true)   // 最新に追従するか
 
   const { data, syncStatus, lastSynced, toggleArea } = useProgress()
   const { remoteClicks, addClick } = useClicks()
   const { messages, addMessage }   = useMessages()
+
+  // メッセージ数か表示行数が変わったとき、最新追従中なら末尾へ移動
+  useEffect(() => {
+    if (pinnedRef.current) setMsgViewStart(Math.max(0, messages.length - msgLines))
+  }, [messages.length, msgLines])
+
+  const maxStart   = Math.max(0, messages.length - msgLines)
+  const viewStart  = Math.min(msgViewStart, maxStart)
+  const atLatest   = viewStart >= maxStart
+  const displayMsgs = messages.slice(viewStart, viewStart + msgLines)
+
+  const handleSeek = (val: number) => {
+    pinnedRef.current = val >= Math.max(0, messages.length - msgLines)
+    setMsgViewStart(val)
+  }
 
   const handleSend = async () => {
     if (!msgInput.trim()) return
@@ -123,11 +140,11 @@ export default function App() {
                 </div>
               </div>
               {/* メッセージ一覧 */}
-              <div className="bg-gray-800/80 px-2 py-1.5 space-y-0.5">
+              <div className="bg-gray-800/80 px-2 py-1.5 space-y-0.5 min-h-[1.5rem]">
                 {messages.length === 0 ? (
                   <p className="text-gray-500">伝言なし</p>
                 ) : (
-                  messages.slice(-msgLines).map(m => (
+                  displayMsgs.map(m => (
                     <p key={m.id} className="text-gray-200 break-all">
                       <span className="text-gray-400 mr-1 shrink-0">[{fmtTime(m.t)}]</span>
                       {m.text}
@@ -135,6 +152,26 @@ export default function App() {
                   ))
                 )}
               </div>
+              {/* シークバー（履歴が表示行数を超えたときだけ表示） */}
+              {messages.length > msgLines && (
+                <div className="flex items-center gap-2 px-2 py-1 bg-gray-800/40 border-t border-gray-700">
+                  <input
+                    type="range"
+                    min={0}
+                    max={maxStart}
+                    value={viewStart}
+                    step={1}
+                    onChange={e => handleSeek(Number(e.target.value))}
+                    className="flex-1 accent-indigo-500 cursor-pointer"
+                    style={{ height: '4px' }}
+                  />
+                  <span className="text-gray-500 shrink-0 tabular-nums text-right" style={{ fontSize: '10px', minWidth: '3.5rem' }}>
+                    {atLatest
+                      ? '最新'
+                      : `${viewStart + 1}〜${Math.min(viewStart + msgLines, messages.length)}件`}
+                  </span>
+                </div>
+              )}
               {/* 入力欄 */}
               <div className="flex border-t border-gray-600">
                 <input
