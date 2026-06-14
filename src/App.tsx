@@ -86,9 +86,10 @@ export default function App() {
             />
 
             {activeMap.areas.length > 0 ? (() => {
-              const hasZones = activeMap.areas.some(a => a.zone)
+              const hasZones       = activeMap.areas.some(a => a.zone)
+              const splitZoneLayout = activeMap.splitZoneLayout ?? false
 
-              const renderBtn = (areaId: string) => {
+              const renderBtn = (areaId: string, compact = false) => {
                 const area = activeMap.areas.find(a => a.id === areaId)!
                 const s = statusMap[area.id] ?? 'unexplored'
                 const onStyle =
@@ -102,7 +103,7 @@ export default function App() {
                     onClick={() => toggleArea(activeMapId, area.id)}
                     title={area.name}
                     className={[
-                      'w-full px-2 py-1.5 rounded text-xs text-left border transition-all select-none truncate',
+                      `w-full ${compact ? 'px-1' : 'px-2'} py-1.5 rounded text-xs text-left border transition-all select-none truncate`,
                       s === 'cleared'
                         ? 'bg-gray-700/50 border-gray-600 text-gray-500 line-through hover:bg-gray-700'
                         : onStyle,
@@ -113,21 +114,47 @@ export default function App() {
                 )
               }
 
-              return hasZones ? (
-                // ゾーン割り当てあり → 3×3 グリッド
-                <div className="grid grid-cols-3 gap-1 pt-2">
-                  {ZONES.map(zone => (
-                    <div key={zone} className="flex flex-col gap-1">
-                      {activeMap.areas
-                        .filter(a => a.zone === zone)
-                        .map(a => renderBtn(a.id))}
-                    </div>
-                  ))}
-                </div>
-              ) : (
+              if (!hasZones) return (
                 // ゾーンなし → 通常 4列グリッド
                 <div className="grid grid-cols-4 gap-1 pt-2">
                   {activeMap.areas.map(a => renderBtn(a.id))}
+                </div>
+              )
+
+              return (
+                // ゾーン割り当てあり → 3×3 グリッド
+                <div className="grid grid-cols-3 gap-1 pt-2">
+                  {ZONES.map(zone => {
+                    const areas  = activeMap.areas.filter(a => a.zone === zone)
+                    const isLeft  = zone.endsWith('-left')
+                    const isRight = zone.endsWith('-right')
+
+                    // splitZoneLayout かつ左右ゾーンに両種混在 → 内部2列分割
+                    if (splitZoneLayout && (isLeft || isRight) && areas.length > 0) {
+                      const usedAreas   = areas.filter(a => a.name.endsWith('(使用)'))
+                      const normalAreas = areas.filter(a => !a.name.endsWith('(使用)'))
+                      // 左ゾーン: (使用)=左列 / 通常=右列
+                      // 右ゾーン: 通常=左列 / (使用)=右列
+                      const leftCol  = isLeft ? usedAreas   : normalAreas
+                      const rightCol = isLeft ? normalAreas : usedAreas
+                      return (
+                        <div key={zone} className="grid grid-cols-2 gap-0.5">
+                          <div className="flex flex-col gap-1">
+                            {leftCol.map(a => renderBtn(a.id, true))}
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            {rightCol.map(a => renderBtn(a.id, true))}
+                          </div>
+                        </div>
+                      )
+                    }
+
+                    return (
+                      <div key={zone} className="flex flex-col gap-1">
+                        {areas.map(a => renderBtn(a.id))}
+                      </div>
+                    )
+                  })}
                 </div>
               )
             })() : (

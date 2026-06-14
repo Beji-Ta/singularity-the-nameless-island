@@ -65,6 +65,7 @@ export const MAPS: MapData[] = [
     imagePath: './maps/2@nls3.JPG',
     imageWidth: 810,
     imageHeight: 586,
+    splitZoneLayout: true,
     areas: [
       // ★ Boss（緑）
       { id: 'boss1',                  name: 'Boss①',              color: 'green',      zone: 'middle-center', points: [] },

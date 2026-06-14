@@ -39,4 +39,6 @@ export interface MapData {
   imageWidth: number
   imageHeight: number
   areas: AreaData[]
+  /** true の場合、左右ゾーンを (使用)/非(使用) で2列分割して表示 */
+  splitZoneLayout?: boolean
 }
