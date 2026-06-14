@@ -23,6 +23,22 @@ function applyChange(
   }
 }
 
+// 保留中のローカル変更をサーバーデータに上書きマージ
+function mergePending(
+  base: ProgressData,
+  pending: Map<string, AreaStatus>,
+): ProgressData {
+  if (pending.size === 0) return base
+  const maps = { ...base.maps }
+  for (const [key, val] of pending) {
+    const sep    = key.indexOf('|')
+    const mapId  = key.slice(0, sep)
+    const areaId = key.slice(sep + 1)
+    maps[mapId] = { ...(maps[mapId] ?? {}), [areaId]: val }
+  }
+  return { ...base, maps }
+}
+
 export function useProgress() {
   const [data, setData]             = useState<ProgressData>(EMPTY)
   const [sha, setSha]               = useState('')
@@ -33,9 +49,10 @@ export function useProgress() {
   const dataRef       = useRef(data)
   const writingRef    = useRef(false)
   const syncStatusRef = useRef(syncStatus)
-  // 最後にローカルで書いた lastUpdated タイムスタンプ。
-  // これより古いポーリング結果は無視して楽観的更新を守る。
   const lastWriteRef  = useRef('')
+  // 書き込み確定待ちの変更: "mapId|areaId" → 期待値
+  // ポーリングがサーバーで確定を確認するまで保持し、poll によるリバートを防ぐ
+  const pendingRef    = useRef<Map<string, AreaStatus>>(new Map())
 
   shaRef.current        = sha
   dataRef.current       = data
@@ -49,15 +66,23 @@ export function useProgress() {
       const result = await fetchProgress()
       if (writingRef.current) return
       if (!result.changed) return
-      // ローカルの書き込みより古いデータは無視（書き込み完了直後の stale 取得を防ぐ）
       if (lastWriteRef.current && result.data.lastUpdated < lastWriteRef.current) return
-      setData(result.data)
+
+      // サーバーで確定済みの保留変更を削除
+      for (const [key, expected] of pendingRef.current) {
+        const sep    = key.indexOf('|')
+        const mapId  = key.slice(0, sep)
+        const areaId = key.slice(sep + 1)
+        if ((result.data.maps[mapId]?.[areaId] ?? 'unexplored') === expected) {
+          pendingRef.current.delete(key)
+        }
+      }
+      // 残った保留変更を必ずマージ（ポーリングによるリバート防止）
+      setData(mergePending(result.data, pendingRef.current))
       setSha(result.sha)
       setLastSynced(new Date())
       if (syncStatusRef.current === 'error') setSyncStatus('idle')
-    } catch {
-      setSyncStatus('error')
-    }
+    } catch { setSyncStatus('error') }
   }, [])
 
   useEffect(() => {
@@ -72,9 +97,11 @@ export function useProgress() {
     const current: AreaStatus = dataRef.current.maps[mapId]?.[areaId] ?? 'unexplored'
     const next: AreaStatus    = current === 'unexplored' ? 'cleared' : 'unexplored'
 
+    const key        = `${mapId}|${areaId}`
     const optimistic = applyChange(dataRef.current, mapId, areaId, next)
-    // write タイムスタンプを setData より先に記録（poll が古いデータを弾けるように）
+
     lastWriteRef.current = optimistic.lastUpdated
+    pendingRef.current.set(key, next)   // 確定待ちとして登録
     setData(optimistic)
     setSyncStatus('syncing')
     writingRef.current = true
@@ -84,6 +111,7 @@ export function useProgress() {
       setSha(newSha)
       setLastSynced(new Date())
       setSyncStatus('idle')
+      // pending は poll がサーバー確定を確認した時に削除するため、ここでは削除しない
     }
 
     try {
@@ -96,21 +124,20 @@ export function useProgress() {
           if (fresh.changed) {
             const merged = applyChange(fresh.data, mapId, areaId, next)
             lastWriteRef.current = merged.lastUpdated
-            setData(merged)
             setSha(fresh.sha)
+            setData(mergePending(merged, pendingRef.current))
             await doWrite(merged, fresh.sha)
           } else {
+            // 304 = SHA 不一致のまま解決不能 → エラー表示のみ（リバートしない）
             setSyncStatus('error')
           }
         } catch {
           setSyncStatus('error')
-          const rollback = await fetchProgress().catch(() => null)
-          if (rollback?.changed) { setData(rollback.data); setSha(rollback.sha) }
+          // リバートしない: pending を保持して楽観的表示を維持
         }
       } else {
+        // ネットワークエラー等 → エラー表示のみ（リバートしない）
         setSyncStatus('error')
-        const rollback = await fetchProgress().catch(() => null)
-        if (rollback?.changed) { setData(rollback.data); setSha(rollback.sha) }
       }
     } finally {
       writingRef.current = false
