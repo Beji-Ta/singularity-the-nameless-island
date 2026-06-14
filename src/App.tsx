@@ -186,7 +186,7 @@ export default function App() {
           </div>{/* /MAP側 */}
 
           {/* 右列：伝言板＋ボタングリッド */}
-          <div>
+          <div style={sideLayout ? { width: activeMap.imageWidth } : undefined}>
             {/* 伝言板 */}
             <div className="mb-2 border border-gray-600 rounded overflow-hidden text-xs">
               {/* ヘッダー：タイトル／リセット／行数拡縮 */}
