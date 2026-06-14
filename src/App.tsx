@@ -175,8 +175,20 @@ export default function App() {
               MAPをクリックすると波紋で大まかな座標を共有できます
             </div>
 
+            {/* 攻略情報（マップごとに個別設定） */}
+            {activeMap.infoLines && activeMap.infoLines.length > 0 && (
+              <div className="mt-2 p-2 bg-gray-800 border border-gray-600 rounded text-xs text-gray-200 leading-relaxed space-y-0.5">
+                {activeMap.infoLines.map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </div>
+            )}
+          </div>{/* /MAP側 */}
+
+          {/* 右列：伝言板＋ボタングリッド */}
+          <div>
             {/* 伝言板 */}
-            <div className="mt-2 border border-gray-600 rounded overflow-hidden text-xs">
+            <div className="mb-2 border border-gray-600 rounded overflow-hidden text-xs">
               {/* ヘッダー：タイトル／リセット／行数拡縮 */}
               <div className="flex items-center justify-between bg-gray-700/60 px-2 py-0.5 border-b border-gray-600">
                 <span className="text-gray-400 font-medium">伝言板</span>
@@ -242,16 +254,6 @@ export default function App() {
                 </button>
               </div>
             </div>
-
-            {/* 攻略情報（マップごとに個別設定） */}
-            {activeMap.infoLines && activeMap.infoLines.length > 0 && (
-              <div className="mt-2 p-2 bg-gray-800 border border-gray-600 rounded text-xs text-gray-200 leading-relaxed space-y-0.5">
-                {activeMap.infoLines.map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
-              </div>
-            )}
-          </div>{/* /MAP側 */}
 
             {activeMap.areas.length > 0 ? (() => {
               const hasZones       = activeMap.areas.some(a => a.zone)
@@ -352,6 +354,7 @@ export default function App() {
                 エリアデータ未設定（src/data/maps.ts に追加）
               </p>
             )}
+          </div>{/* /右列 */}
           </div>
         </div>
       </main>
