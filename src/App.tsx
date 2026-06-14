@@ -145,9 +145,10 @@ export default function App() {
           </div>
         )}
 
-        {/* マップ画像＋ボタン（同幅） */}
+        {/* マップ画像＋ボタン */}
         <div className="overflow-x-auto">
-          <div style={{ width: activeMap.imageWidth, maxWidth: '100%' }}>
+          <div className="flex flex-col [@media(max-height:700px)]:flex-row [@media(max-height:700px)]:items-start [@media(max-height:700px)]:gap-3">
+          <div className="shrink-0" style={{ width: activeMap.imageWidth, maxWidth: '100%' }}>
             <MapView
               map={activeMap}
               remoteClicks={remoteClicks.filter(c => c.mapId === activeMapId)}
@@ -236,6 +237,7 @@ export default function App() {
                 ))}
               </div>
             )}
+          </div>{/* /MAP側 */}
 
             {activeMap.areas.length > 0 ? (() => {
               const hasZones       = activeMap.areas.some(a => a.zone)
@@ -290,14 +292,14 @@ export default function App() {
 
               if (!hasZones) return (
                 // ゾーンなし → 通常 4列グリッド
-                <div className="grid grid-cols-4 gap-1 pt-2">
+                <div className="grid grid-cols-4 gap-1 pt-2 [@media(max-height:700px)]:pt-0">
                   {activeMap.areas.map(a => renderBtn(a.id))}
                 </div>
               )
 
               return (
                 // ゾーン割り当てあり → 3×3 グリッド
-                <div className="grid grid-cols-3 gap-1 pt-2">
+                <div className="grid grid-cols-3 gap-1 pt-2 [@media(max-height:700px)]:pt-0">
                   {ZONES.map(zone => {
                     const areas  = activeMap.areas.filter(a => a.zone === zone)
                     const isLeft  = zone.endsWith('-left')
@@ -332,7 +334,7 @@ export default function App() {
                 </div>
               )
             })() : (
-              <p className="text-gray-500 text-xs pt-2">
+              <p className="text-gray-500 text-xs pt-2 [@media(max-height:700px)]:pt-0">
                 エリアデータ未設定（src/data/maps.ts に追加）
               </p>
             )}
