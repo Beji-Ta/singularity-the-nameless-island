@@ -22,36 +22,32 @@ const ZONES: AreaZone[] = [
 export default function App() {
   const [activeMapId, setActiveMapId] = useState(MAPS[0].id)
   const [msgInput, setMsgInput] = useState('')
-  const [msgLines, setMsgLines] = useState(5)
-  const [msgViewStart, setMsgViewStart] = useState(0)
+  const [msgLines, setMsgLines] = useState(3)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const msgInputRef = useRef<HTMLInputElement>(null)
-  const pinnedRef = useRef(true)   // 最新に追従するか
+  const msgListRef  = useRef<HTMLDivElement>(null)
+  const atBottomRef = useRef(true)  // スクロールが末尾かどうか
 
   const { data, syncStatus, lastSynced, toggleArea } = useProgress()
   const { remoteClicks, addClick } = useClicks()
   const { messages, addMessage, resetMessages } = useMessages()
 
-  // メッセージ数か表示行数が変わったとき、最新追従中なら末尾へ移動
+  // 新着メッセージが来たとき、末尾にいれば自動スクロール
   useEffect(() => {
-    if (pinnedRef.current) setMsgViewStart(Math.max(0, messages.length - msgLines))
-  }, [messages.length, msgLines])
+    const el = msgListRef.current
+    if (!el || !atBottomRef.current) return
+    el.scrollTop = el.scrollHeight
+  }, [messages])
 
-  const maxStart   = Math.max(0, messages.length - msgLines)
-  const viewStart  = Math.min(msgViewStart, maxStart)
-  const atLatest   = viewStart >= maxStart
-  const displayMsgs = messages.slice(viewStart, viewStart + msgLines)
-
-  const handleSeek = (val: number) => {
-    pinnedRef.current = val >= Math.max(0, messages.length - msgLines)
-    setMsgViewStart(val)
+  const handleMsgScroll = () => {
+    const el = msgListRef.current
+    if (!el) return
+    atBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 20
   }
 
   const handleReset = async () => {
     await resetMessages()
     setShowResetConfirm(false)
-    pinnedRef.current = true
-    setMsgViewStart(0)
   }
 
   const handleSend = async () => {
@@ -154,44 +150,26 @@ export default function App() {
                   </div>
                 </div>
               </div>
-              {/* メッセージ一覧＋縦シークバー */}
-              <div className="flex items-stretch bg-gray-800/80">
-                <div className="flex-1 px-2 py-1.5 space-y-0.5 min-h-[1.5rem]">
-                  {messages.length === 0 ? (
-                    <p className="text-gray-500">伝言なし</p>
-                  ) : (
-                    displayMsgs.map(m => (
-                      <p key={m.id} className="text-gray-200 break-all">
-                        <span className="text-gray-400 mr-1 shrink-0">[{fmtTime(m.t)}]</span>
-                        {m.text}
-                      </p>
-                    ))
-                  )}
-                </div>
-                {/* 縦シークバー（履歴が表示行数を超えたときだけ表示） */}
-                {messages.length > msgLines && (
-                  <div className="flex flex-col items-center border-l border-gray-700 py-1 px-0.5" style={{ width: '20px' }}>
-                    <span className="text-gray-600 leading-none mb-0.5" style={{ fontSize: '8px' }}>新</span>
-                    <input
-                      type="range"
-                      min={0}
-                      max={maxStart}
-                      value={viewStart}
-                      step={1}
-                      onChange={e => handleSeek(Number(e.target.value))}
-                      title={atLatest ? '最新' : `${viewStart + 1}〜${Math.min(viewStart + msgLines, messages.length)}件目`}
-                      style={{
-                        writingMode: 'vertical-lr',
-                        WebkitAppearance: 'slider-vertical',
-                        flex: 1,
-                        width: '14px',
-                        cursor: 'pointer',
-                        accentColor: '#6366f1',
-                        direction: 'rtl',
-                      }}
-                    />
-                    <span className="text-gray-600 leading-none mt-0.5" style={{ fontSize: '8px' }}>旧</span>
-                  </div>
+              {/* メッセージ一覧（スクロール） */}
+              <div
+                ref={msgListRef}
+                onScroll={handleMsgScroll}
+                className="overflow-y-auto bg-gray-800/80 px-2 py-1.5 space-y-0.5
+                  [&::-webkit-scrollbar]:w-1.5
+                  [&::-webkit-scrollbar-track]:bg-gray-800
+                  [&::-webkit-scrollbar-thumb]:bg-gray-600
+                  [&::-webkit-scrollbar-thumb:hover]:bg-gray-500"
+                style={{ maxHeight: `${msgLines * 1.25 + 0.75}rem` }}
+              >
+                {messages.length === 0 ? (
+                  <p className="text-gray-500">伝言なし</p>
+                ) : (
+                  messages.map(m => (
+                    <p key={m.id} className="text-gray-200 break-all">
+                      <span className="text-gray-400 mr-1 shrink-0">[{fmtTime(m.t)}]</span>
+                      {m.text}
+                    </p>
+                  ))
                 )}
               </div>
               {/* 入力欄 */}
