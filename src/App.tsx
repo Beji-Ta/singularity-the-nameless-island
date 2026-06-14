@@ -217,7 +217,7 @@ export default function App() {
                   onChange={e => setMsgInput(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleSend()}
                   placeholder="伝言を入力… Enter または送信"
-                  className="flex-1 bg-gray-700 text-white px-2 py-1.5 outline-none placeholder-gray-500 min-w-0"
+                  className="flex-1 bg-white text-gray-900 px-2 py-1.5 outline-none placeholder-gray-400 min-w-0"
                 />
                 <button
                   onClick={handleSend}
