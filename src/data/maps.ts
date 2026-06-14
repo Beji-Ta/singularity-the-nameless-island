@@ -17,14 +17,15 @@ export const MAPS: MapData[] = [
       { id: 'chuo',          name: '中央',         color: 'yellow',     zone: 'bottom-right', points: [[391,421],[527,421],[527,448],[391,448]] },
       { id: 'renraku',       name: '連絡通路東',   color: 'yellow',     zone: 'top-center',   points: [[155,208],[272,208],[272,228],[155,228]] },
       { id: 'chika',         name: '地下',         color: 'yellow',     zone: 'top-center',   points: [[242,188],[283,188],[283,207],[242,207]] },
-      { id: 'shitsumushitsu',name: '執務室',       color: 'yellow',     zone: 'middle-center',points: [[200,325],[295,325],[295,343],[200,343]] },
-      { id: 'wine',          name: 'ワイン倉庫',   color: 'yellow',     zone: 'middle-right', points: [[307,322],[415,322],[415,342],[307,342]] },
       { id: 'kabocha',       name: 'かぼちゃ倉庫', color: 'yellow',     zone: 'bottom-center',points: [[213,449],[352,449],[352,467],[213,467]] },
       // ■ 使用場所（水色）
-      { id: 'gaimon_center', name: '外門（使用）', color: 'cyan',       zone: 'middle-center',points: [[302,250],[393,250],[393,272],[302,272]] },
-      // Boss（緑）
+      { id: 'gaimon_center', name: '外門（使用）', color: 'cyan',       zone: 'middle-right', points: [[302,250],[393,250],[393,272],[302,272]] },
+      // ★ 中段右: 外門(使用) → ワイン倉庫
+      { id: 'wine',          name: 'ワイン倉庫',   color: 'yellow',     zone: 'middle-right', points: [[307,322],[415,322],[415,342],[307,342]] },
+      // Boss（緑）- 中段中央: Boss①→Boss②→執務室
       { id: 'boss1',         name: 'Boss①（物）', color: 'green',      zone: 'middle-center',points: [] },
       { id: 'boss2',         name: 'Boss②（魔）', color: 'green',      zone: 'middle-center',points: [] },
+      { id: 'shitsumushitsu',name: '執務室',       color: 'yellow',     zone: 'middle-center',points: [[200,325],[295,325],[295,343],[200,343]] },
     ],
   },
   {
