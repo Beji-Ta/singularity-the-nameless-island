@@ -26,6 +26,7 @@ export default function App() {
   const [msgLines, setMsgLines] = useState(3)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [showProgressResetConfirm, setShowProgressResetConfirm] = useState(false)
+  const [sideLayout, setSideLayout] = useState(() => window.innerHeight <= 700)
   const { value: watcherCount, setCounter: setWatcherCount } = useCounter()
   const msgInputRef = useRef<HTMLInputElement>(null)
   const msgListRef  = useRef<HTMLDivElement>(null)
@@ -34,6 +35,13 @@ export default function App() {
   const { data, syncStatus, lastSynced, toggleArea, resetAllProgress } = useProgress()
   const { remoteClicks, addClick } = useClicks()
   const { messages, addMessage, resetMessages } = useMessages()
+
+  // ビューポート高さ監視（700px以下でボタンをMAP右に配置）
+  useEffect(() => {
+    const check = () => setSideLayout(window.innerHeight <= 700)
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   // 新着メッセージが来たとき、末尾にいれば自動スクロール
   useEffect(() => {
@@ -147,8 +155,14 @@ export default function App() {
 
         {/* マップ画像＋ボタン */}
         <div className="overflow-x-auto">
-          <div className="flex flex-col [@media(max-height:700px)]:flex-row [@media(max-height:700px)]:items-start [@media(max-height:700px)]:gap-3">
-          <div className="shrink-0" style={{ width: activeMap.imageWidth, maxWidth: '100%' }}>
+          <div
+            className={`flex ${sideLayout ? 'flex-row items-start gap-3' : 'flex-col'}`}
+            style={sideLayout ? undefined : { width: activeMap.imageWidth, maxWidth: '100%' }}
+          >
+          <div
+            className={sideLayout ? 'shrink-0' : undefined}
+            style={sideLayout ? { width: activeMap.imageWidth, maxWidth: '100%' } : undefined}
+          >
             <MapView
               map={activeMap}
               remoteClicks={remoteClicks.filter(c => c.mapId === activeMapId)}
@@ -292,14 +306,14 @@ export default function App() {
 
               if (!hasZones) return (
                 // ゾーンなし → 通常 4列グリッド
-                <div className="grid grid-cols-4 gap-1 pt-2 [@media(max-height:700px)]:pt-0">
+                <div className={`grid grid-cols-4 gap-1 ${sideLayout ? '' : 'pt-2'}`}>
                   {activeMap.areas.map(a => renderBtn(a.id))}
                 </div>
               )
 
               return (
                 // ゾーン割り当てあり → 3×3 グリッド
-                <div className="grid grid-cols-3 gap-1 pt-2 [@media(max-height:700px)]:pt-0">
+                <div className={`grid grid-cols-3 gap-1 ${sideLayout ? '' : 'pt-2'}`}>
                   {ZONES.map(zone => {
                     const areas  = activeMap.areas.filter(a => a.zone === zone)
                     const isLeft  = zone.endsWith('-left')
@@ -334,7 +348,7 @@ export default function App() {
                 </div>
               )
             })() : (
-              <p className="text-gray-500 text-xs pt-2 [@media(max-height:700px)]:pt-0">
+              <p className={`text-gray-500 text-xs ${sideLayout ? '' : 'pt-2'}`}>
                 エリアデータ未設定（src/data/maps.ts に追加）
               </p>
             )}
