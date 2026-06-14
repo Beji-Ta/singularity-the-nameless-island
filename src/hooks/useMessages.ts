@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { fetchMessages, writeMessage, ConflictError } from '../lib/github'
+import { fetchMessages, writeMessage, clearMessages, ConflictError } from '../lib/github'
 import type { MessageEntry } from '../types'
 
 const POLL_MS = 4_000
@@ -62,5 +62,28 @@ export function useMessages() {
     }
   }, [])
 
-  return { messages, addMessage }
+  const resetMessages = useCallback(async () => {
+    writingRef.current = true
+    try {
+      const sha = shaRef.current || (await fetchMessages()).sha
+      await clearMessages(sha)
+      entriesRef.current = []
+      shaRef.current = ''
+      setMessages([])
+    } catch (err) {
+      if (err instanceof ConflictError) {
+        try {
+          const fresh = await fetchMessages()
+          await clearMessages(fresh.sha)
+          entriesRef.current = []
+          shaRef.current = ''
+          setMessages([])
+        } catch { /* 失敗しても無視 */ }
+      }
+    } finally {
+      writingRef.current = false
+    }
+  }, [])
+
+  return { messages, addMessage, resetMessages }
 }

@@ -199,6 +199,26 @@ export async function writeMessage(
   return result.content.sha
 }
 
+export async function clearMessages(currentSha: string): Promise<string> {
+  const encoded = btoa('[]')
+  const body: Record<string, string> = { message: 'msg: clear', content: encoded }
+  if (currentSha) body.sha = currentSha
+
+  const res = await fetch(MESSAGES_URL, {
+    method: 'PUT',
+    headers: HEADERS,
+    body: JSON.stringify(body),
+  })
+
+  if (res.status === 409) throw new ConflictError()
+  if (!res.ok) throw new GitHubError(res.status, await res.text())
+
+  const result = await res.json() as { content: { sha: string } }
+  messagesEtag = ''
+  messagesSha  = result.content.sha
+  return result.content.sha
+}
+
 // ── エラークラス ──────────────────────────────────────────────────────────────
 
 export class ConflictError extends Error {

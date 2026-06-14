@@ -24,12 +24,13 @@ export default function App() {
   const [msgInput, setMsgInput] = useState('')
   const [msgLines, setMsgLines] = useState(5)
   const [msgViewStart, setMsgViewStart] = useState(0)
+  const [showResetConfirm, setShowResetConfirm] = useState(false)
   const msgInputRef = useRef<HTMLInputElement>(null)
   const pinnedRef = useRef(true)   // 最新に追従するか
 
   const { data, syncStatus, lastSynced, toggleArea } = useProgress()
   const { remoteClicks, addClick } = useClicks()
-  const { messages, addMessage }   = useMessages()
+  const { messages, addMessage, resetMessages } = useMessages()
 
   // メッセージ数か表示行数が変わったとき、最新追従中なら末尾へ移動
   useEffect(() => {
@@ -44,6 +45,13 @@ export default function App() {
   const handleSeek = (val: number) => {
     pinnedRef.current = val >= Math.max(0, messages.length - msgLines)
     setMsgViewStart(val)
+  }
+
+  const handleReset = async () => {
+    await resetMessages()
+    setShowResetConfirm(false)
+    pinnedRef.current = true
+    setMsgViewStart(0)
   }
 
   const handleSend = async () => {
@@ -122,56 +130,70 @@ export default function App() {
 
             {/* 伝言板 */}
             <div className="mt-2 border border-gray-600 rounded overflow-hidden text-xs">
-              {/* ヘッダー：タイトル＋行数拡縮ボタン */}
+              {/* ヘッダー：タイトル／リセット／行数拡縮 */}
               <div className="flex items-center justify-between bg-gray-700/60 px-2 py-0.5 border-b border-gray-600">
                 <span className="text-gray-400 font-medium">伝言板</span>
-                <div className="flex items-center gap-0.5">
+                <div className="flex items-center gap-2">
                   <button
-                    onClick={() => setMsgLines(n => Math.max(1, n - 1))}
-                    className="text-gray-400 hover:text-white px-1.5 py-0.5 rounded hover:bg-gray-600 transition-colors"
-                    title="表示行を減らす"
-                  >▲</button>
-                  <span className="text-gray-500 w-5 text-center tabular-nums">{msgLines}</span>
-                  <button
-                    onClick={() => setMsgLines(n => n + 1)}
-                    className="text-gray-400 hover:text-white px-1.5 py-0.5 rounded hover:bg-gray-600 transition-colors"
-                    title="表示行を増やす"
-                  >▼</button>
+                    onClick={() => setShowResetConfirm(true)}
+                    className="text-red-400 hover:text-red-300 px-1.5 py-0.5 rounded hover:bg-gray-600 transition-colors"
+                    title="履歴をリセット"
+                  >リセット</button>
+                  <div className="flex items-center gap-0.5">
+                    <button
+                      onClick={() => setMsgLines(n => Math.max(1, n - 1))}
+                      className="text-gray-400 hover:text-white px-1.5 py-0.5 rounded hover:bg-gray-600 transition-colors"
+                      title="表示行を減らす"
+                    >▲</button>
+                    <span className="text-gray-500 w-5 text-center tabular-nums">{msgLines}</span>
+                    <button
+                      onClick={() => setMsgLines(n => n + 1)}
+                      className="text-gray-400 hover:text-white px-1.5 py-0.5 rounded hover:bg-gray-600 transition-colors"
+                      title="表示行を増やす"
+                    >▼</button>
+                  </div>
                 </div>
               </div>
-              {/* メッセージ一覧 */}
-              <div className="bg-gray-800/80 px-2 py-1.5 space-y-0.5 min-h-[1.5rem]">
-                {messages.length === 0 ? (
-                  <p className="text-gray-500">伝言なし</p>
-                ) : (
-                  displayMsgs.map(m => (
-                    <p key={m.id} className="text-gray-200 break-all">
-                      <span className="text-gray-400 mr-1 shrink-0">[{fmtTime(m.t)}]</span>
-                      {m.text}
-                    </p>
-                  ))
+              {/* メッセージ一覧＋縦シークバー */}
+              <div className="flex items-stretch bg-gray-800/80">
+                <div className="flex-1 px-2 py-1.5 space-y-0.5 min-h-[1.5rem]">
+                  {messages.length === 0 ? (
+                    <p className="text-gray-500">伝言なし</p>
+                  ) : (
+                    displayMsgs.map(m => (
+                      <p key={m.id} className="text-gray-200 break-all">
+                        <span className="text-gray-400 mr-1 shrink-0">[{fmtTime(m.t)}]</span>
+                        {m.text}
+                      </p>
+                    ))
+                  )}
+                </div>
+                {/* 縦シークバー（履歴が表示行数を超えたときだけ表示） */}
+                {messages.length > msgLines && (
+                  <div className="flex flex-col items-center border-l border-gray-700 py-1 px-0.5" style={{ width: '20px' }}>
+                    <span className="text-gray-600 leading-none mb-0.5" style={{ fontSize: '8px' }}>新</span>
+                    <input
+                      type="range"
+                      min={0}
+                      max={maxStart}
+                      value={viewStart}
+                      step={1}
+                      onChange={e => handleSeek(Number(e.target.value))}
+                      title={atLatest ? '最新' : `${viewStart + 1}〜${Math.min(viewStart + msgLines, messages.length)}件目`}
+                      style={{
+                        writingMode: 'vertical-lr',
+                        WebkitAppearance: 'slider-vertical',
+                        flex: 1,
+                        width: '14px',
+                        cursor: 'pointer',
+                        accentColor: '#6366f1',
+                        direction: 'rtl',
+                      }}
+                    />
+                    <span className="text-gray-600 leading-none mt-0.5" style={{ fontSize: '8px' }}>旧</span>
+                  </div>
                 )}
               </div>
-              {/* シークバー（履歴が表示行数を超えたときだけ表示） */}
-              {messages.length > msgLines && (
-                <div className="flex items-center gap-2 px-2 py-1 bg-gray-800/40 border-t border-gray-700">
-                  <input
-                    type="range"
-                    min={0}
-                    max={maxStart}
-                    value={viewStart}
-                    step={1}
-                    onChange={e => handleSeek(Number(e.target.value))}
-                    className="flex-1 accent-indigo-500 cursor-pointer"
-                    style={{ height: '4px' }}
-                  />
-                  <span className="text-gray-500 shrink-0 tabular-nums text-right" style={{ fontSize: '10px', minWidth: '3.5rem' }}>
-                    {atLatest
-                      ? '最新'
-                      : `${viewStart + 1}〜${Math.min(viewStart + msgLines, messages.length)}件`}
-                  </span>
-                </div>
-              )}
               {/* 入力欄 */}
               <div className="flex border-t border-gray-600">
                 <input
@@ -281,6 +303,29 @@ export default function App() {
           </div>
         </div>
       </main>
+
+      {/* リセット確認ダイアログ */}
+      {showResetConfirm && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-gray-800 border border-gray-600 rounded-lg p-5 shadow-xl w-72">
+            <p className="text-white text-sm mb-5 text-center">本当にリセットしますか？</p>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => setShowResetConfirm(false)}
+                className="px-5 py-1.5 text-sm bg-gray-700 hover:bg-gray-600 text-gray-200 rounded transition-colors"
+              >
+                キャンセル
+              </button>
+              <button
+                onClick={handleReset}
+                className="px-5 py-1.5 text-sm bg-red-600 hover:bg-red-500 text-white rounded transition-colors"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
