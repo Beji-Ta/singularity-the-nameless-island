@@ -244,26 +244,47 @@ export default function App() {
               const renderBtn = (areaId: string, compact = false) => {
                 const area = activeMap.areas.find(a => a.id === areaId)!
                 const s = statusMap[area.id] ?? 'unexplored'
+                const isUsed = area.name.endsWith('(使用)') || area.name.endsWith('（使用）')
                 const onStyle =
-                  area.color === 'green'                   ? 'bg-green-600 border-green-800 text-white hover:bg-green-700' :
-                  area.name.endsWith('(使用)') || area.color === 'cyan'
-                                                           ? 'bg-cyan-200 border-cyan-400 text-cyan-900 hover:bg-cyan-300' :
-                  area.color === 'lightgreen'              ? 'bg-green-200 border-green-400 text-green-900 hover:bg-green-300' :
-                                                             'bg-yellow-200 border-yellow-400 text-yellow-900 hover:bg-yellow-300'
+                  area.color === 'green'           ? 'bg-green-600 border-green-800 text-white hover:bg-green-700' :
+                  isUsed || area.color === 'cyan'  ? 'bg-cyan-200 border-cyan-400 text-cyan-900 hover:bg-cyan-300' :
+                  area.color === 'lightgreen'      ? 'bg-green-200 border-green-400 text-green-900 hover:bg-green-300' :
+                                                     'bg-yellow-200 border-yellow-400 text-yellow-900 hover:bg-yellow-300'
+
+                // (使用) ボタンのリンク先 MAP を検索（同一MAПは除外）
+                let linkMapId: string | null = null
+                if (isUsed) {
+                  const baseName = area.name.slice(0, -4)
+                  for (const map of MAPS) {
+                    if (map.id === activeMapId) continue
+                    if (map.areas.some(a => a.name === baseName)) { linkMapId = map.id; break }
+                  }
+                }
+
                 return (
-                  <button
-                    key={area.id}
-                    onClick={() => toggleArea(activeMapId, area.id)}
-                    title={area.name}
-                    className={[
-                      `w-full ${compact ? 'px-1' : 'px-2'} py-1.5 rounded text-xs text-left border transition-all select-none truncate`,
-                      s === 'cleared'
-                        ? 'bg-gray-700/50 border-gray-600 text-gray-500 line-through hover:bg-gray-700'
-                        : onStyle,
-                    ].join(' ')}
-                  >
-                    {area.name}
-                  </button>
+                  <div key={area.id} className="relative">
+                    <button
+                      onClick={() => toggleArea(activeMapId, area.id)}
+                      title={area.name}
+                      className={[
+                        `w-full ${compact ? 'px-1' : 'px-2'} ${linkMapId ? 'pr-5' : ''} py-1.5 rounded text-xs text-left border transition-all select-none truncate`,
+                        s === 'cleared'
+                          ? 'bg-gray-700/50 border-gray-600 text-gray-500 line-through hover:bg-gray-700'
+                          : onStyle,
+                      ].join(' ')}
+                    >
+                      {area.name}
+                    </button>
+                    {linkMapId && (
+                      <button
+                        onClick={e => { e.stopPropagation(); setActiveMapId(linkMapId!) }}
+                        title={`${MAPS.find(m => m.id === linkMapId)?.label ?? ''}へ移動`}
+                        className="absolute right-0.5 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center text-[9px] bg-indigo-600/80 hover:bg-indigo-500 active:bg-indigo-700 text-white rounded-sm transition-colors z-10 leading-none select-none"
+                      >
+                        →
+                      </button>
+                    )}
+                  </div>
                 )
               }
 
