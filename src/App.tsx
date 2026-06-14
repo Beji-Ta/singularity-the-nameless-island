@@ -22,6 +22,7 @@ const ZONES: AreaZone[] = [
 export default function App() {
   const [activeMapId, setActiveMapId] = useState(MAPS[0].id)
   const [msgInput, setMsgInput] = useState('')
+  const [msgLines, setMsgLines] = useState(5)
   const msgInputRef = useRef<HTMLInputElement>(null)
 
   const { data, syncStatus, lastSynced, toggleArea } = useProgress()
@@ -104,11 +105,29 @@ export default function App() {
 
             {/* 伝言板 */}
             <div className="mt-2 border border-gray-600 rounded overflow-hidden text-xs">
-              <div className="bg-gray-800/80 px-2 py-1.5 min-h-[2.5rem] space-y-0.5">
+              {/* ヘッダー：タイトル＋行数拡縮ボタン */}
+              <div className="flex items-center justify-between bg-gray-700/60 px-2 py-0.5 border-b border-gray-600">
+                <span className="text-gray-400 font-medium">伝言板</span>
+                <div className="flex items-center gap-0.5">
+                  <button
+                    onClick={() => setMsgLines(n => Math.max(1, n - 1))}
+                    className="text-gray-400 hover:text-white px-1.5 py-0.5 rounded hover:bg-gray-600 transition-colors"
+                    title="表示行を減らす"
+                  >▲</button>
+                  <span className="text-gray-500 w-5 text-center tabular-nums">{msgLines}</span>
+                  <button
+                    onClick={() => setMsgLines(n => n + 1)}
+                    className="text-gray-400 hover:text-white px-1.5 py-0.5 rounded hover:bg-gray-600 transition-colors"
+                    title="表示行を増やす"
+                  >▼</button>
+                </div>
+              </div>
+              {/* メッセージ一覧 */}
+              <div className="bg-gray-800/80 px-2 py-1.5 space-y-0.5">
                 {messages.length === 0 ? (
                   <p className="text-gray-500">伝言なし</p>
                 ) : (
-                  messages.slice(-8).map(m => (
+                  messages.slice(-msgLines).map(m => (
                     <p key={m.id} className="text-gray-200 break-all">
                       <span className="text-gray-400 mr-1 shrink-0">[{fmtTime(m.t)}]</span>
                       {m.text}
@@ -116,6 +135,7 @@ export default function App() {
                   ))
                 )}
               </div>
+              {/* 入力欄 */}
               <div className="flex border-t border-gray-600">
                 <input
                   ref={msgInputRef}

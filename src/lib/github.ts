@@ -161,7 +161,8 @@ export async function fetchMessages(): Promise<FetchMessagesResult> {
   messagesEtag = res.headers.get('ETag') ?? ''
   const file   = await res.json() as { content: string; sha: string }
   messagesSha  = file.sha
-  const json   = atob(file.content.replace(/\n/g, ''))
+  const raw    = atob(file.content.replace(/\n/g, ''))
+  const json   = decodeURIComponent(escape(raw))   // UTF-8 binary → Unicode
   return { entries: JSON.parse(json) as MessageEntry[], sha: file.sha, changed: true }
 }
 
