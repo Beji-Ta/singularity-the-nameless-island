@@ -66,24 +66,44 @@ export const MAPS: MapData[] = [
     imageWidth: 810,
     imageHeight: 586,
     areas: [
-      // ● 入手場所（黄色）
-      { id: 'wine',              name: 'ワイン',           color: 'yellow',     points: [] },
-      { id: 'nw_kobeya_1',       name: '北西小部屋①',     color: 'yellow',     points: [] },
-      { id: 'nw_kobeya_2',       name: '北西小部屋②',     color: 'yellow',     points: [] },
-      { id: 'kita_hiro_higashi', name: '北広間東',         color: 'yellow',     points: [] },
-      { id: 'renraku_nw',        name: '連絡通路北西',     color: 'yellow',     points: [] },
-      { id: 'ne_kobeya_ue',      name: '北東小部屋(上)',   color: 'yellow',     points: [] },
-      { id: 'saishi_hiroba',     name: '祭祀場広間',       color: 'yellow',     points: [] },
-      { id: 'kita_hiro',         name: '北広間',           color: 'yellow',     points: [] },
-      { id: 'saishi_danju',      name: '祭祀場壇上',       color: 'yellow',     points: [] },
-      { id: 'suijoba',           name: '炊事場',           color: 'yellow',     points: [] },
-      { id: 'kita_hiro_nishi',   name: '北広間西',         color: 'yellow',     points: [] },
-      { id: 'gakushushitsu',     name: '学習室',           color: 'yellow',     points: [] },
-      { id: 'ne_kobeya_shita',   name: '北東小部屋(下)',   color: 'yellow',     points: [] },
-      { id: 'shitsumushitsu',    name: '執務室',           color: 'yellow',     points: [] },
-      // ■ 使用場所（薄緑）
-      { id: 'tensosaki',         name: '転送先',           color: 'lightgreen', points: [] },
-      { id: 'chuo',              name: '中央',             color: 'lightgreen', points: [] },
+      // ★ Boss（緑）
+      { id: 'boss1',                  name: 'Boss①',              color: 'green',      zone: 'middle-center', points: [] },
+      // 上段左: 北西小部屋①(使用)、②(使用)、③(使用)、北広間東、祭祀場広間、炊事場
+      { id: 'nw_kobeya_1_soko',       name: '北西小部屋①(使用)', color: 'lightgreen', zone: 'top-left',      points: [] },
+      { id: 'nw_kobeya_2_soko',       name: '北西小部屋②(使用)', color: 'lightgreen', zone: 'top-left',      points: [] },
+      { id: 'nw_kobeya_3_soko',       name: '北西小部屋③(使用)', color: 'lightgreen', zone: 'top-left',      points: [] },
+      { id: 'kita_hiro_higashi',       name: '北広間東',            color: 'yellow',     zone: 'top-left',      points: [] },
+      { id: 'saishi_hiroba',           name: '祭祀場広間',          color: 'yellow',     zone: 'top-left',      points: [] },
+      { id: 'suijoba',                 name: '炊事場',              color: 'yellow',     zone: 'top-left',      points: [] },
+      // 上段中央: ワイン(使用)、北広間東(使用)、北広間西(使用)
+      { id: 'wine',                    name: 'ワイン(使用)',        color: 'lightgreen', zone: 'top-center',    points: [] },
+      { id: 'kita_hiro_higashi_soko',  name: '北広間東(使用)',      color: 'lightgreen', zone: 'top-center',    points: [] },
+      { id: 'kita_hiro_nishi_soko',    name: '北広間西(使用)',      color: 'lightgreen', zone: 'top-center',    points: [] },
+      // 上段右: 連絡通路北西、祭祀場壇上、北広間西、北東小部屋①(使用)、②(使用)、③(使用)
+      { id: 'renraku_nw',              name: '連絡通路北西',        color: 'yellow',     zone: 'top-right',     points: [] },
+      { id: 'saishi_danju',            name: '祭祀場壇上',          color: 'yellow',     zone: 'top-right',     points: [] },
+      { id: 'kita_hiro_nishi',         name: '北広間西',            color: 'yellow',     zone: 'top-right',     points: [] },
+      { id: 'ne_kobeya_1_soko',        name: '北東小部屋①(使用)', color: 'lightgreen', zone: 'top-right',     points: [] },
+      { id: 'ne_kobeya_2_soko',        name: '北東小部屋②(使用)', color: 'lightgreen', zone: 'top-right',     points: [] },
+      { id: 'ne_kobeya_3_soko',        name: '北東小部屋③(使用)', color: 'lightgreen', zone: 'top-right',     points: [] },
+      // 下段左: 北西小部屋①②③、学習室(使用)
+      { id: 'nw_kobeya_1',             name: '北西小部屋①',        color: 'yellow',     zone: 'bottom-left',   points: [] },
+      { id: 'nw_kobeya_2',             name: '北西小部屋②',        color: 'yellow',     zone: 'bottom-left',   points: [] },
+      { id: 'nw_kobeya_3',             name: '北西小部屋③',        color: 'yellow',     zone: 'bottom-left',   points: [] },
+      { id: 'gakushushitsu_soko',      name: '学習室(使用)',        color: 'lightgreen', zone: 'bottom-left',   points: [] },
+      // 下段右: 北東小部屋①②③、執務室(使用)
+      { id: 'ne_kobeya_1',             name: '北東小部屋①',        color: 'yellow',     zone: 'bottom-right',  points: [] },
+      { id: 'ne_kobeya_2',             name: '北東小部屋②',        color: 'yellow',     zone: 'bottom-right',  points: [] },
+      { id: 'ne_kobeya_3',             name: '北東小部屋③',        color: 'yellow',     zone: 'bottom-right',  points: [] },
+      { id: 'shitsumushitsu_soko',     name: '執務室(使用)',        color: 'lightgreen', zone: 'bottom-right',  points: [] },
+      // ゾーンなし（3×3グリッドに表示しない）
+      { id: 'kita_hiro',               name: '北広間',              color: 'yellow',     points: [] },
+      { id: 'gakushushitsu',           name: '学習室',              color: 'yellow',     points: [] },
+      { id: 'shitsumushitsu',          name: '執務室',              color: 'yellow',     points: [] },
+      { id: 'ne_kobeya_ue',            name: '北東小部屋(上)',      color: 'yellow',     points: [] },
+      { id: 'ne_kobeya_shita',         name: '北東小部屋(下)',      color: 'yellow',     points: [] },
+      { id: 'tensosaki',               name: '転送先',              color: 'lightgreen', points: [] },
+      { id: 'chuo',                    name: '中央',                color: 'lightgreen', points: [] },
     ],
   },
   {
