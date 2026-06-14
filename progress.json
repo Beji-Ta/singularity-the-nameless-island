@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-14T02:57:40.735Z",
+  "lastUpdated": "2026-06-14T02:57:42.024Z",
   "maps": {
     "2@nls1": {
       "shoko": "unexplored",
@@ -33,7 +33,8 @@
     "2@nls4": {
       "dokuso_1": "unexplored",
       "dokuso_2": "unexplored",
-      "dokuso_soko_tl": "cleared"
+      "dokuso_soko_tl": "unexplored",
+      "odori": "cleared"
     },
     "2@nls3": {
       "nw_kobeya_2": "unexplored",
