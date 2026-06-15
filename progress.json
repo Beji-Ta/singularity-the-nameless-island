@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-15T10:53:53.536Z",
+  "lastUpdated": "2026-06-15T15:28:28.416Z",
   "maps": {
     "2@nls1": {
       "gaimon_center": "unexplored",
@@ -17,7 +17,7 @@
     },
     "2@nls4": {
       "renraku_nw_soko": "unexplored",
-      "chuo_tsuro_nishi_soko": "cleared"
+      "chuo_tsuro_nishi_soko": "unexplored"
     }
   }
 }
