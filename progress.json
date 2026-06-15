@@ -1,13 +1,16 @@
 {
-  "lastUpdated": "2026-06-15T23:36:41.646Z",
+  "lastUpdated": "2026-06-15T23:36:44.929Z",
   "maps": {
     "2@nls1": {
       "gaimon_center": "unexplored",
       "shoko": "unexplored",
-      "boss1": "unexplored",
+      "boss1": "cleared",
       "hikaeshitsu": "unexplored",
-      "chika": "unexplored",
-      "renraku": "cleared"
+      "chika": "cleared",
+      "renraku": "cleared",
+      "wine": "cleared",
+      "sojiyogu": "cleared",
+      "gaimon_north": "cleared"
     },
     "2@nls3": {
       "gakushushitsu_soko": "unexplored"
