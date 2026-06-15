@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-15T03:13:12.668Z",
+  "lastUpdated": "2026-06-15T03:13:38.742Z",
   "maps": {
     "2@nls1": {
       "gaimon_center": "unexplored",
@@ -14,6 +14,9 @@
     },
     "2@nls2": {
       "wine_soko": "unexplored"
+    },
+    "2@nls4": {
+      "renraku_nw_soko": "cleared"
     }
   }
 }
