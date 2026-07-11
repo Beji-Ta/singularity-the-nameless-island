@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-11T11:49:21.592Z",
+  "lastUpdated": "2026-07-11T11:49:22.657Z",
   "maps": {
     "2@nls1": {
       "gaimon_center": "cleared",
@@ -13,7 +13,9 @@
       "gaimon_north": "cleared",
       "boss2": "cleared",
       "shitsumushitsu": "cleared",
-      "gakushushitsu": "cleared"
+      "gakushushitsu": "cleared",
+      "kabocha": "cleared",
+      "chuo": "cleared"
     },
     "2@nls3": {
       "gakushushitsu_soko": "unexplored"
