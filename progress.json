@@ -1,8 +1,9 @@
 {
-  "lastUpdated": "2026-08-08T04:53:36.968Z",
+  "lastUpdated": "2026-08-08T05:05:15.375Z",
   "maps": {
     "2@nls1": {
-      "renraku": "unexplored"
+      "renraku": "unexplored",
+      "sojiyogu": "cleared"
     }
   }
 }
