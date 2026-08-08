@@ -1,9 +1,10 @@
 {
-  "lastUpdated": "2026-08-08T05:05:15.375Z",
+  "lastUpdated": "2026-08-08T05:05:16.777Z",
   "maps": {
     "2@nls1": {
       "renraku": "unexplored",
-      "sojiyogu": "cleared"
+      "sojiyogu": "cleared",
+      "gaimon_north": "cleared"
     }
   }
 }
